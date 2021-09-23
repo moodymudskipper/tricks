@@ -2,19 +2,38 @@
 % Please edit documentation in R/condition-helpers.R
 \name{condition-helpers}
 \alias{condition-helpers}
-\alias{is_comment_line}
-\alias{is_comment_block}
-\alias{is_parsable}
-\alias{is_call}
+\alias{selection_is_empty}
+\alias{selection_is_comment_line}
+\alias{selection_is_comment_block}
+\alias{selection_is_n_lines}
+\alias{selection_is_single_line}
+\alias{selection_is_parsable}
+\alias{project_is_package}
 \title{Condition Helpers}
 \usage{
-is_comment_line(txt)
+selection_is_empty(.txt = current_selection())
 
-is_comment_block(txt)
+selection_is_comment_line()
 
-is_parsable(txt)
+selection_is_comment_block()
 
-is_call(txt, to = NULL)
+selection_is_n_lines(n)
+
+selection_is_single_line()
+
+selection_is_parsable(
+  multiline_ok = TRUE,
+  single_line_ok = TRUE,
+  symbol_ok = TRUE,
+  empty_ok = FALSE
+)
+
+project_is_package(
+  uses_git = NA,
+  uses_github = NA,
+  uses_c = NA,
+  uses_cran_comments = NA
+)
 }
 \arguments{
 \item{txt}{A character object}

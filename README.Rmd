@@ -111,7 +111,8 @@ the selected function :
 * It should be considered only when selecting a function so
 we'll have a condition on the value `.val`
 * The action uses the function `debugonce()` which uses non standard evaluation,
- but this is made easy using `.sub`
+ but this is made easy using `.sub`.
+ 
  
 ```{r}
 poof::add_tricks(
@@ -124,6 +125,8 @@ poof::add_tricks(
 ![](man/figures/poof3.gif)
 
 Note: 
+
+
 
 Since the conditions are all evaluated for each trick each time the addin is triggered
 we need to make sure these don't have side effects such as changing the 

@@ -9,3 +9,4 @@ ave(1:3, c(1,1,2))
 
 
 
+call_addin("giphyr", "Add GIFs")

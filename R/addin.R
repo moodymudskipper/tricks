@@ -1,58 +1,59 @@
 #' addin
 #' @importFrom utils getFromNamespace select.list
 #' @export
+#' @import typed
 addin <- function() {
-  env <- parent.frame()
-  context       <- rstudioapi::getSourceEditorContext()
-  selection_txt <- rstudioapi::primary_selection(context)[["text"]]
-  selection_lng <- try(str2lang(selection_txt), silent = TRUE)
-  selection_txt_is_parsable <- !inherits(selection_lng,"try-error")
-  selection_txt_is_simple_call <-
-    selection_txt_is_parsable &&
-    (!is.call(selection_lng) || deparse1(selection_lng[[1]]) %in% c(
-      "::", ":::", "[", "[[", "$"))
-  if(selection_txt_is_simple_call) {
-    selection_val <- try(eval(selection_lng, env))
-    selection_txt_is_evaluable <-  !inherits(selection_val, "try-error")
-  } else {
-    selection_txt_is_evaluable <- FALSE
-    selection_val <- NULL
-  }
+  # reset all memoised functions
+  forget_all()
+  # running so it can be memoised
+  env <- current_env()
+  current_selection()
 
-  selection_val <- if(selection_txt_is_simple_call) eval(selection_lng, env)
   opts <- getOption("poof.tricks")
+
   # test all conditions to filter eligible tricks
   eval_cond <- function(x) {
-    if(!selection_txt_is_parsable &&
-       any(c(".val", ".lng", ".sub") %in% all.vars(x))
-    ) {
-      return(FALSE)
+    #print(x)
+    #browser()
+    lhs_call <- x[[2]]
+    vars <- all.vars(x)
+    if(!selection_is_parsable()) {
+      if (any(c(".val", ".lng", ".sub") %in% vars)) return(FALSE)
+      lhs_call <- do.call(substitute, list(lhs_call, list(
+        .txt = current_selection())))
+    } else if(!selection_is_evaluable(simple_only = TRUE)) {
+      if (".val" %in% vars) return(FALSE)
+      lhs_call <- do.call(substitute, list(lhs_call, list(
+        .txt = current_selection(),
+        .lng = call("quote", current_expr()),
+        .sub = current_expr())))
+    } else {
+      lhs_call <- do.call(substitute, list(lhs_call, list(
+        .txt = current_selection(),
+        .lng = call("quote", current_expr()),
+        .sub = current_expr(),
+        .val = current_value())))
     }
-
-    if(!selection_txt_is_evaluable && ".val" %in% all.vars(x)) {
-      return(FALSE)
-    }
-
-    call <- x[[2]]
-    call <- do.call(substitute, list(call, list(
-      .txt = selection_txt,
-      .lng = substitute(quote(CALL), list(CALL = selection_lng)),
-      .sub = selection_lng,
-      .val = selection_val)))
-    eval(call, env)
+    # res <- try(eval(lhs_call, env), silent = TRUE)
+    # isTRUE(res)
+    eval(lhs_call, env)
   }
+
+  #browser()
   conds <- sapply(opts, eval_cond)
+  #browser()
   # send cursor to console
   rstudioapi::sendToConsole("", FALSE)
   names(opts)[conds] <- sapply(
     names(opts[conds]),
     glue::glue,
-    .envir = eval(bquote(list(
-      .txt = .(selection_txt),
-      .lng = quote(.(substitute(quote(CALL), list(CALL = selection_lng)))),
-      .sub = .(substitute(quote(CALL), list(CALL = selection_lng))),
-      .val = .(selection_val)
-    ))))
+    .envir = list(.txt = current_selection())    #   eval(bquote(list(
+    #   .txt = .(selection_txt),
+    #   .lng = quote(.(substitute(CALL, list(CALL = selection_lng)))),
+    #   .sub = .(substitute(quote(CALL), list(CALL = selection_lng))),
+    #   .val = .(selection_val)
+    # )))
+    )
 
   opt_nm <- select.list(names(opts[conds]))
   if(opt_nm == "") {
@@ -60,17 +61,17 @@ addin <- function() {
     return(NULL)
   }
   # extract action call
-  call <- opts[[opt_nm]][[3]]
-  # if .val couldn't be evaluated in the first part, eval now
-  if(".val" %in% all.vars(call) && !selection_txt_is_evaluable) {
-    selection_val <- eval(selection_lng, env)
-  }
-  # substitute the value
-  call <- do.call(substitute, list(call, list(
-    .txt = selection_txt,
-    .lng = substitute(quote(CALL), list(CALL = selection_lng)),
-    .sub = selection_lng,
-    .val = selection_val)))
-  eval(call, env)
+  rhs_call <- opts[[opt_nm]][[3]]
+
+  vars <- all.vars(rhs_call)
+  substitute_list <- list(.txt = current_selection())
+
+  if(".val" %in% vars) substitute_list[[".val"]] <- current_value()
+  if(".lng" %in% vars) substitute_list[[".lng"]] <- call("quote", current_expr())
+  if(".val" %in% vars) substitute_list[[".sub"]] <- current_expr()
+
+  rhs_call <- do.call(substitute, list(rhs_call, substitute_list))
+
+  eval(rhs_call, env)
   rstudioapi::sendToConsole("")
 }

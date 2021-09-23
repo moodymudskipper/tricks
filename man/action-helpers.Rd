@@ -4,11 +4,14 @@
 \alias{action-helpers}
 \alias{call_addin}
 \alias{replace_selection}
+\alias{replace_current_lines}
 \title{Action Helpers}
 \usage{
 call_addin(package, name)
 
 replace_selection(txt)
+
+replace_current_lines(txt)
 }
 \arguments{
 \item{package}{A string. The addin's package}

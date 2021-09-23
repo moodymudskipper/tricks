@@ -17,4 +17,5 @@ URL: https://github.com/moodymudskipper/poof
 BugReports: https://github.com/moodymudskipper/poof/issues
 Imports: 
     glue,
-    rstudioapi
+    rstudioapi,
+    typed
