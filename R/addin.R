@@ -1,8 +1,12 @@
 #' addin
 #' @importFrom utils getFromNamespace select.list
 #' @export
-#' @import typed
 addin <- function() {
+  # make all functions available for the time of the call
+  if(!"package:poof" %in% search()) {
+    library(poof)
+    on.exit(detach("package:poof"))
+  }
   # reset all memoised functions
   forget_all()
   # running so it can be memoised

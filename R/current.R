@@ -1,4 +1,9 @@
 
+#' Current selection
+#'
+#' Utilities to get data about the selection
+#'
+#' @param full boolean. Whether to return full path or base name
 #' @export
 current_selection <- function() {
   context       <- rstudioapi::getSourceEditorContext()
@@ -11,23 +16,30 @@ current_env <- function() {
   parent.frame()
 }
 
-# we probably need a single general function between curren_call and current_expr
+# we probably need a single general function between current_call and current_expr
 
+#' @export
+#' @rdname current_selection
 current_call <- function() {
   str2lang(current_selection())
 }
 
+#' @export
+#' @rdname current_selection
 current_expr <- function() {
   expr <- parse(text = current_selection())
   if(length(expr) == 1) return(expr[[1]])
   as.call(c(quote(`{`), as.list(expr)))
 }
 
+#' @export
+#' @rdname current_selection
 current_value <- function() {
   eval(current_expr(), current_env())
 }
 
 #' @export
+#' @rdname current_selection
 current_line_numbers <- function() {
   context       <- rstudioapi::getSourceEditorContext()
   start_row <- context$selection[[1]]$range$start[["row"]]
@@ -36,11 +48,13 @@ current_line_numbers <- function() {
 }
 
 #' @export
+#' @rdname current_selection
 current_lines <- function() {
   current_file_code()[current_line_numbers()]
 }
 
 #' @export
+#' @rdname current_selection
 current_path <- function(full = TRUE) {
   current_code_block()
   context       <- rstudioapi::getSourceEditorContext()
@@ -50,12 +64,14 @@ current_path <- function(full = TRUE) {
 }
 
 #' @export
+#' @rdname current_selection
 current_file_code <- function() {
-  context       <- rstudioapi::getSourceEditorContext()
+  context <- rstudioapi::getSourceEditorContext()
   context$contents
 }
 
 #' @export
+#' @rdname current_selection
 current_code_block <- function() {
   code <- current_file_code()
   ind <- current_line_numbers()

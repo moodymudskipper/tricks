@@ -4,13 +4,21 @@
 #' to filter which tricks the addin should display.
 #'
 #' @param txt A character object
-#' @param to function names whose calls are to be detected
+#' @param n number of lines
+#' @param multi_ok Are multiple calls eligible ?
+#' @param single_ok Are single calls eligible ?
+#' @param symbol_ok Are symbols eligible ?
+#' @param litteral_ok Are literal strings or numbers eligible ?
+#' @param reserved_ok Are reserved words eligible ?
+#' @param simple_only if `TRUE`, only symbols and calls to `::`, `:::`, `[`,
+#'   `[[` or `$` are considered. I should be used on condition calls to make sure
+#'   we never evaluate a call that would have side effects.
+#' @param class class used to check inheritance
 #' @export
 #' @name condition-helpers
-selection_is_empty <- function(.txt = current_selection()) {
-  .txt == ""
+selection_is_empty <- function(txt = current_selection()) {
+  txt == ""
 }
-
 
 #' @export
 #' @rdname condition-helpers
@@ -21,7 +29,6 @@ selection_is_comment_line <- function() {
 #' @export
 #' @rdname condition-helpers
 selection_is_comment_block <- function() {
-  .txt <-
   grepl("^( *#[^\n]*\n)* *#[^\n]*?$",  current_selection())
 }
 
@@ -58,7 +65,8 @@ selection_is_parsable <- function(multi_ok = TRUE, single_ok = TRUE, symbol_ok =
 
 }
 
-
+#' @export
+#' @rdname condition-helpers
 selection_is_evaluable <- function(simple_only = FALSE) {
   if(simple_only) {
     selection_is_simple_call() && !fails(current_value())
@@ -168,10 +176,11 @@ selection_is_data_frame <- function() {
 #' @export
 #' @rdname condition-helpers
 project_is_package <- function(
-  uses_git = NA,
-  uses_github = NA,
-  uses_c = NA,
-  uses_cran_comments = NA) {
+  # uses_git = NA,
+  # uses_github = NA,
+  # uses_c = NA,
+  # uses_cran_comments = NA
+  ) {
   # mainly built around usethis features
   # We can add infinite features here but should keep them relevant to poof tricks
   # as much as possible
@@ -185,22 +194,22 @@ project_is_package <- function(
 
   package_bool <- file.exists("DESCRIPTION")
   if(!package_bool) return(FALSE)
-  if(!is.na(uses_git)) {
-    git_bool <- file.exists(".gitignore")
-    if(uses_git != git_bool) return(FALSE)
-  }
-  if(!is.na(uses_github)) {
-    github_bool <- any(grepl("^URL: https://github.com/", readLines("DESCRIPTION")))
-    if(uses_github != github_bool) return(FALSE)
-  }
-  if(!is.na(uses_c)) {
-    c_bool <- dir.exists("src")
-    if(uses_c != c_bool) return(FALSE)
-  }
-  if(!is.na(uses_cran_comments)) {
-    cran_comments_bool <- file.exists("cran-comments.md")
-    if(uses_cran_comments != cran_comments_bool) return(FALSE)
-  }
+  # if(!is.na(uses_git)) {
+  #   git_bool <- file.exists(".gitignore")
+  #   if(uses_git != git_bool) return(FALSE)
+  # }
+  # if(!is.na(uses_github)) {
+  #   github_bool <- any(grepl("^URL: https://github.com/", readLines("DESCRIPTION")))
+  #   if(uses_github != github_bool) return(FALSE)
+  # }
+  # if(!is.na(uses_c)) {
+  #   c_bool <- dir.exists("src")
+  #   if(uses_c != c_bool) return(FALSE)
+  # }
+  # if(!is.na(uses_cran_comments)) {
+  #   cran_comments_bool <- file.exists("cran-comments.md")
+  #   if(uses_cran_comments != cran_comments_bool) return(FALSE)
+  # }
   TRUE
 }
 

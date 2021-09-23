@@ -8,10 +8,20 @@
 \alias{selection_is_n_lines}
 \alias{selection_is_single_line}
 \alias{selection_is_parsable}
+\alias{selection_is_evaluable}
+\alias{selection_is_litteral_number}
+\alias{selection_is_litteral_string}
+\alias{selection_is_litteral}
+\alias{selection_is_reserved_word}
+\alias{selection_is_symbol}
+\alias{selection_is_call}
+\alias{selection_inherits}
+\alias{selection_is_function}
+\alias{selection_is_data_frame}
 \alias{project_is_package}
 \title{Condition Helpers}
 \usage{
-selection_is_empty(.txt = current_selection())
+selection_is_empty(txt = current_selection())
 
 selection_is_comment_line()
 
@@ -21,24 +31,50 @@ selection_is_n_lines(n)
 
 selection_is_single_line()
 
-selection_is_parsable(
-  multiline_ok = TRUE,
-  single_line_ok = TRUE,
-  symbol_ok = TRUE,
-  empty_ok = FALSE
-)
+selection_is_parsable(multi_ok = TRUE, single_ok = TRUE, symbol_ok = TRUE)
 
-project_is_package(
-  uses_git = NA,
-  uses_github = NA,
-  uses_c = NA,
-  uses_cran_comments = NA
-)
+selection_is_evaluable(simple_only = FALSE)
+
+selection_is_litteral_number()
+
+selection_is_litteral_string()
+
+selection_is_litteral()
+
+selection_is_reserved_word()
+
+selection_is_symbol(litteral_ok = FALSE, reserved_ok = FALSE)
+
+selection_is_call(symbol_ok = FALSE, litteral_ok = FALSE, reserved_ok = FALSE)
+
+selection_inherits(class)
+
+selection_is_function()
+
+selection_is_data_frame()
+
+project_is_package()
 }
 \arguments{
 \item{txt}{A character object}
 
-\item{to}{function names whose calls are to be detected}
+\item{n}{number of lines}
+
+\item{multi_ok}{Are multiple calls eligible ?}
+
+\item{single_ok}{Are single calls eligible ?}
+
+\item{symbol_ok}{Are symbols eligible ?}
+
+\item{simple_only}{if \code{TRUE}, only symbols and calls to \code{::}, \code{:::}, \code{[},
+\code{[[} or \code{$} are considered. I should be used on condition calls to make sure
+we never evaluate a call that would have side effects.}
+
+\item{litteral_ok}{Are literal strings or numbers eligible ?}
+
+\item{reserved_ok}{Are reserved words eligible ?}
+
+\item{class}{class used to check inheritance}
 }
 \description{
 These helpers are meant to be used on the left hand side of the trick specification,

@@ -5,6 +5,8 @@
 \alias{call_addin}
 \alias{replace_selection}
 \alias{replace_current_lines}
+\alias{insert_at_position}
+\alias{send_cursor_at_position}
 \title{Action Helpers}
 \usage{
 call_addin(package, name)
@@ -12,14 +14,18 @@ call_addin(package, name)
 replace_selection(txt)
 
 replace_current_lines(txt)
+
+insert_at_position(txt, row = Inf, col = Inf)
+
+send_cursor_at_position(row = 1, col = 1)
 }
 \arguments{
-\item{package}{A string. The addin's package}
-
-\item{name}{A string. The addin's name}
+\item{package, name}{package and addin name}
 
 \item{txt}{A character object, or will be coerced to character using \code{deparse()}.
 Used as a replacement for the selection text.}
+
+\item{row, col}{row and column in he editor}
 }
 \description{
 These helpers are meant to be used on the right hand side of the trick specification,

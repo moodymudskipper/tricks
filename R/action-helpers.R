@@ -6,8 +6,8 @@
 #' * `replace_selection` replaces the selection in the editor with its argument
 #' * `call_addin` calls a standard RStudio addin
 #'
-#' @param package A string. The addin's package
-#' @param name A string. The addin's name
+#' @param package,name package and addin name
+#' @param row,col row and column in he editor
 #' @param txt A character object, or will be coerced to character using `deparse()`.
 #'   Used as a replacement for the selection text.
 #'

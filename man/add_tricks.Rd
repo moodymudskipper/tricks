@@ -4,6 +4,7 @@
 \alias{add_tricks}
 \alias{rm_tricks}
 \alias{show_tricks}
+\alias{edit_tricks}
 \title{Add, Remove or Show Tricks}
 \usage{
 add_tricks(..., .reset = FALSE)
@@ -11,11 +12,13 @@ add_tricks(..., .reset = FALSE)
 rm_tricks(...)
 
 show_tricks()
+
+edit_tricks()
 }
 \arguments{
 \item{...}{tricks to add (or replace), or names of tricks to remove}
 
-\item{reset}{whether to remove existing tricks}
+\item{.reset}{whether to remove existing tricks}
 }
 \description{
 Add, Remove or Show Tricks

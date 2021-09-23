@@ -1,7 +1,7 @@
 
 #' Add, Remove or Show Tricks
 #' @param ... tricks to add (or replace), or names of tricks to remove
-#' @param reset whether to remove existing tricks
+#' @param .reset whether to remove existing tricks
 #' @export
 add_tricks <- function(..., .reset = FALSE) {
   if(.reset) rm_tricks()
@@ -30,8 +30,8 @@ show_tricks <- function() {
   getOption("poof.tricks")
 }
 
-# TODO: edit_tricks to open RProfile, add a call to add_tricks if relevant and place cursor at right place
-
+#' @rdname add_tricks
+#' @export
 edit_tricks <- function() {
   suppressMessages(usethis::edit_r_profile())
   repeat {
@@ -53,6 +53,13 @@ edit_tricks <- function() {
             "\nModify it if you want, save, restart R, and the defined tricks will",
             "be available in all sessions without attaching the package")
   }
+
+  # make all functions available for the time of the call
+  if(!"package:poof" %in% search()) {
+    library(poof)
+    on.exit(detach("package:poof"))
+  }
+
   choice <- select.list(c("Save and restart R to make your changes available", "Cancel"))
 
   if(choice == "Cancel") {
