@@ -9,43 +9,60 @@
 \alias{selection_is_single_line}
 \alias{selection_is_parsable}
 \alias{selection_is_evaluable}
-\alias{selection_is_litteral_number}
-\alias{selection_is_litteral_string}
 \alias{selection_is_litteral}
 \alias{selection_is_reserved_word}
 \alias{selection_is_symbol}
 \alias{selection_is_call}
+\alias{selection_contains_string}
 \alias{selection_inherits}
 \alias{selection_is_function}
 \alias{selection_is_data_frame}
-\alias{project_is_package}
+\alias{selection_is_cran_package}
+\alias{selection_is_in_rmd_chunk}
 \title{Condition Helpers}
 \usage{
-selection_is_empty(txt = current_selection())
+selection_is_empty(target = c("default", "lines", "file"))
 
-selection_is_comment_line()
+selection_is_comment_line(target = c("default", "lines", "file"))
 
-selection_is_comment_block()
+selection_is_comment_block(target = c("default", "lines", "file"))
 
-selection_is_n_lines(n)
+selection_is_n_lines(n, target = c("default", "lines", "file"))
 
-selection_is_single_line()
+selection_is_single_line(target = c("default", "lines", "file"))
 
-selection_is_parsable(multi_ok = TRUE, single_ok = TRUE, symbol_ok = TRUE)
+selection_is_parsable(
+  multi_ok = TRUE,
+  single_ok = TRUE,
+  symbol_ok = TRUE,
+  target = c("default", "lines", "file")
+)
 
-selection_is_evaluable(simple_only = FALSE)
+selection_is_evaluable(
+  simple_only = FALSE,
+  target = c("default", "lines", "file")
+)
 
-selection_is_litteral_number()
-
-selection_is_litteral_string()
-
-selection_is_litteral()
+selection_is_litteral(type = NA)
 
 selection_is_reserved_word()
 
 selection_is_symbol(litteral_ok = FALSE, reserved_ok = FALSE)
 
-selection_is_call(symbol_ok = FALSE, litteral_ok = FALSE, reserved_ok = FALSE)
+selection_is_call(
+  symbol_ok = FALSE,
+  litteral_ok = FALSE,
+  reserved_ok = FALSE,
+  target = c("default", "lines", "file")
+)
+
+selection_contains_string(
+  pattern,
+  n_min = 1L,
+  n_max = Inf,
+  target = c("default", "lines", "file"),
+  ...
+)
 
 selection_inherits(class)
 
@@ -53,11 +70,11 @@ selection_is_function()
 
 selection_is_data_frame()
 
-project_is_package()
+selection_is_cran_package()
+
+selection_is_in_rmd_chunk()
 }
 \arguments{
-\item{txt}{A character object}
-
 \item{n}{number of lines}
 
 \item{multi_ok}{Are multiple calls eligible ?}
@@ -75,6 +92,8 @@ we never evaluate a call that would have side effects.}
 \item{reserved_ok}{Are reserved words eligible ?}
 
 \item{class}{class used to check inheritance}
+
+\item{txt}{A character object}
 }
 \description{
 These helpers are meant to be used on the left hand side of the trick specification,

@@ -2,6 +2,9 @@ poof::add_tricks(
   .reset = TRUE,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # No selection - general
+  "Edit tricks" =
+    selection_is_empty() ~
+    edit_tricks(),
   "Edit '.Rprofile'" =
     selection_is_empty() ~
     usethis::edit_r_profile(),
@@ -25,21 +28,21 @@ poof::add_tricks(
     call_addin("addinslist", "Browse RStudio addins"),
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # No selection - in a package project
-  "Use git" =
-    selection_is_empty() &&
-    project_is_package(uses_git = FALSE) ~
-    usethis::use_git(),
-  "Use github" =
-    selection_is_empty() &&
-    project_is_package(uses_github = FALSE) ~
-    usethis::use_github(),
-  "Use cran-comments"  =
-    selection_is_empty() &&
-    project_is_package(uses_cran_comments = FALSE) ~
-    usethis::use_cran_comments(),
+  # "Use git" =
+  #   selection_is_empty() &&
+  #   project_is_package(uses_git = FALSE) ~
+  #   usethis::use_git(),
+  # "Use github" =
+  #   selection_is_empty() &&
+  #   project_is_package(uses_github = FALSE) ~
+  #   usethis::use_github(),
+  # "Use cran-comments"  =
+  #   selection_is_empty() &&
+  #   project_is_package(uses_cran_comments = FALSE) ~
+  #   usethis::use_cran_comments(),
   "Calculate package test coverage with `covr::report()`"  =
     selection_is_empty() &&
-    project_is_package(uses_cran_comments = FALSE) ~
+    project_is_package() ~ # uses_cran_comments = FALSE
     covr::report(),
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # No selection - in a Rmd file

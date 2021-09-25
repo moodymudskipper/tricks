@@ -1,11 +1,17 @@
 
+# not sure if we really need curren_lines or current_file_code in the end,
+# now he only difference is we don't collapse with "\n"
+
 #' Current selection
 #'
 #' Utilities to get data about the selection
 #'
 #' @param full boolean. Whether to return full path or base name
 #' @export
-current_selection <- function() {
+current_selection <- function(target = c("default", "lines", "file")) {
+  target <- match.arg(target)
+  if(target == "lines") return(paste(current_lines(), collapse="\n"))
+  if(target == "file") return(paste(current_file_code(), collapse="\n"))
   context       <- rstudioapi::getSourceEditorContext()
   selection_txt <- rstudioapi::primary_selection(context)[["text"]]
   selection_txt
@@ -20,28 +26,33 @@ current_env <- function() {
 
 #' @export
 #' @rdname current_selection
-current_call <- function() {
+current_call <- function(target = c("default", "lines", "file")) {
+  target <- match.arg(target)
   str2lang(current_selection())
 }
 
 #' @export
 #' @rdname current_selection
-current_expr <- function() {
-  expr <- parse(text = current_selection())
+current_expr <- function(target = c("default", "lines", "file")) {
+  target <- match.arg(target)
+  expr <- parse(text = current_selection(target))
   if(length(expr) == 1) return(expr[[1]])
   as.call(c(quote(`{`), as.list(expr)))
 }
 
 #' @export
 #' @rdname current_selection
-current_value <- function() {
-  eval(current_expr(), current_env())
+current_value <- function(target = c("default", "lines", "file")) {
+  target <- match.arg(target)
+  eval(current_expr(target), current_env())
 }
 
 #' @export
 #' @rdname current_selection
-current_line_numbers <- function() {
+current_line_numbers <- function(target = c("default", "lines", "file")) {
+  target <- match.arg(target)
   context       <- rstudioapi::getSourceEditorContext()
+  if(target == "file") return(seq_along(context$contents))
   start_row <- context$selection[[1]]$range$start[["row"]]
   end_row <- context$selection[[1]]$range$end[["row"]]
   start_row:end_row
@@ -49,7 +60,9 @@ current_line_numbers <- function() {
 
 #' @export
 #' @rdname current_selection
-current_lines <- function() {
+current_lines <- function(target = c("default", "lines", "file")) {
+  target <- match.arg(target)
+  if(target == "file") return(current_file_code())
   current_file_code()[current_line_numbers()]
 }
 

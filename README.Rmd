@@ -61,11 +61,11 @@ For example let's set up 3 tricks :
 ```{r}
 poof::add_tricks(
   "Load all" =
-    .txt == "" ~           # only consider if no selection
+    selection_is_empty() ~ # only consider if no selection
     devtools::load_all(),  # call load_all()
   "Turn comments to upper case" =
-    poof::is_comment_block(.txt) ~          # only consider if selection is a comment block
-    poof::replace_selection(toupper(.txt)), # replace selection with upper case
+    selection_is_comment_block() ~                   # only consider if selection is a comment block
+    replace_selection(toupper(current_selection())), # replace selection with upper case
   "Reprex selection" =
     TRUE ~                                          # always consider
     poof::call_addin("reprex", "Reprex selection")  # call existing addin
@@ -74,9 +74,10 @@ poof::add_tricks(
 
 ![](man/figures/poof1.gif)
 
-`poof::is_comment_block()` is a condition helper, there are more of them and they're
-documented in `?"condition-helpers"`. `poof::replace_selection()` and 
-`poof::call_addin()` are action helpers and they're documented in `?"action-helpers"`
+`selection_is_empty()` and `selection_is_comment_block()` are condition helpers, 
+there are more of them and they're documented in `?"condition-helpers"`. 
+
+`replace_selection()` and  `call_addin()` are action helpers and they're documented in `?"action-helpers"`
 
 `.txt` is the selected text, we can also use `.lng`, `.val` and `.sub` on both
 sides of the formula : 

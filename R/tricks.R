@@ -1,5 +1,7 @@
 
 #' Add, Remove or Show Tricks
+#'
+#' Add
 #' @param ... tricks to add (or replace), or names of tricks to remove
 #' @param .reset whether to remove existing tricks
 #' @export
@@ -44,14 +46,12 @@ edit_tricks <- function() {
   if(length(row)) {
     col <- matches[row] + attr(matches, "match.length")[row]
     send_cursor_at_position(row, col)
-    message("Save and restart R to make your changes available!")
   } else {
     txt <- readLines(system.file("default_tricks/default_tricks.R", package = "poof"))
     txt <- paste0(c("", txt), collapse = "\n")
     insert_at_position(txt)
     message("A default `poof::add_tricks()` call has been pasted in you '.RProfile'.",
-            "\nModify it if you want, save, restart R, and the defined tricks will",
-            "be available in all sessions without attaching the package")
+            "\nYou might modify it or leaving it as is for now!")
   }
 
   # make all functions available for the time of the call
@@ -62,7 +62,7 @@ edit_tricks <- function() {
 
   choice <- select.list(c("Save and restart R to make your changes available", "Cancel"))
 
-  if(choice == "Cancel") {
+  if(choice %in% c("Cancel", "")) {
     rstudioapi::documentClose(context$id, save = FALSE)
   } else {
     rstudioapi::documentClose(context$id, save = TRUE)

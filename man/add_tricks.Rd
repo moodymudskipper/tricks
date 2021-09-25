@@ -21,5 +21,5 @@ edit_tricks()
 \item{.reset}{whether to remove existing tricks}
 }
 \description{
-Add, Remove or Show Tricks
+Add
 }

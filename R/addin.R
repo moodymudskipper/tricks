@@ -1,3 +1,5 @@
+# maybe we don't need the .txt etc, and we can replace the .sub by the bquote notation
+
 #' addin
 #' @importFrom utils getFromNamespace select.list
 #' @export
@@ -16,7 +18,8 @@ addin <- function() {
   opts <- getOption("poof.tricks")
 
   # test all conditions to filter eligible tricks
-  eval_cond <- function(x) {
+  eval_cond <- function(nm) {
+    x <- opts[[nm]]
     #print(x)
     #browser()
     lhs_call <- x[[2]]
@@ -38,13 +41,23 @@ addin <- function() {
         .sub = current_expr(),
         .val = current_value())))
     }
-    # res <- try(eval(lhs_call, env), silent = TRUE)
-    # isTRUE(res)
-    eval(lhs_call, env)
+    res <- try(eval(lhs_call, env), silent = TRUE)
+    if(inherits(res, "try-error")) {
+      warning(
+        "The condition couldn't be evaluated for the trick \"", nm, "\"",
+        immediate. = TRUE,
+        call. = FALSE)
+      return(FALSE)
+    }
+    res
   }
 
   #browser()
-  conds <- sapply(opts, eval_cond)
+  conds <- sapply(names(opts), eval_cond)
+  if(!any(conds)) {
+    message("No tricks to show for this selection")
+    return(invisible(NULL))
+  }
   #browser()
   # send cursor to console
   rstudioapi::sendToConsole("", FALSE)

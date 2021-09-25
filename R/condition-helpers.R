@@ -16,20 +16,23 @@
 #' @param class class used to check inheritance
 #' @export
 #' @name condition-helpers
-selection_is_empty <- function(txt = current_selection()) {
-  txt == ""
+selection_is_empty <- function(target = c("default", "lines", "file")) {
+  target <- match.arg(target)
+  current_selection(target) == ""
 }
 
 #' @export
 #' @rdname condition-helpers
-selection_is_comment_line <- function() {
-  grepl("^ *#[^\n]*?$",  current_selection())
+selection_is_comment_line <- function(target = c("default", "lines", "file")) {
+  target <- match.arg(target)
+  grepl("^ *#[^\n]*?$",  current_selection(target))
 }
 
 #' @export
 #' @rdname condition-helpers
-selection_is_comment_block <- function() {
-  grepl("^( *#[^\n]*\n)* *#[^\n]*?$",  current_selection())
+selection_is_comment_block <- function(target = c("default", "lines", "file")) {
+  target <- match.arg(target)
+  grepl("^( *#[^\n]*\n)* *#[^\n]*?$",  current_selection(target))
 }
 
 # #' @export
@@ -40,23 +43,27 @@ selection_is_comment_block <- function() {
 
 #' @export
 #' @rdname condition-helpers
-selection_is_n_lines <- function(n) {
+selection_is_n_lines <- function(n, target = c("default", "lines", "file")) {
+  target <- match.arg(target)
   length(current_line_numbers()) == n
 }
 
 #' @export
 #' @rdname condition-helpers
-selection_is_single_line <- function() {
-  selection_is_n_lines(1)
+selection_is_single_line <- function(target = c("default", "lines", "file")) {
+  target <- match.arg(target)
+  selection_is_n_lines(1, target)
 }
 
 #' @export
 #' @rdname condition-helpers
-selection_is_parsable <- function(multi_ok = TRUE, single_ok = TRUE, symbol_ok = TRUE) {
+selection_is_parsable <- function(multi_ok = TRUE, single_ok = TRUE, symbol_ok = TRUE,
+                                  target = c("default", "lines", "file")) {
+  target <- match.arg(target)
   res <- (
-    single_ok &&  !fails(current_call())
+    single_ok &&  !fails(current_call(target))
   ) || (
-    multi_ok && current_selection() != "" & !fails(current_expr()) && fails(current_call())
+    multi_ok && current_selection(target) != "" & !fails(current_expr(target)) && fails(current_call(target))
   )
   if(!symbol_ok) {
     res <- res && !selection_is_symbol()
@@ -67,32 +74,21 @@ selection_is_parsable <- function(multi_ok = TRUE, single_ok = TRUE, symbol_ok =
 
 #' @export
 #' @rdname condition-helpers
-selection_is_evaluable <- function(simple_only = FALSE) {
+selection_is_evaluable <- function(simple_only = FALSE, target = c("default", "lines", "file")) {
+  target <- match.arg(target)
   if(simple_only) {
-    selection_is_simple_call() && !fails(current_value())
+    selection_is_simple_call() && !fails(current_value(target))
   } else {
-    !fails(current_value())
+    !fails(current_value(target))
   }
 }
 
 #' @export
 #' @rdname condition-helpers
-selection_is_litteral_number <- function() {
-  selection_is_parsable(multi_ok = FALSE) &&
-    is.numeric(current_call())
-}
-
-#' @export
-#' @rdname condition-helpers
-selection_is_litteral_string <-  function() { # implement (quotes_outside_ok = TRUE)
-  selection_is_parsable(multi_ok = FALSE) &&
-    is.character(current_call())
-}
-
-#' @export
-#' @rdname condition-helpers
-selection_is_litteral <- function() {
-  selection_is_litteral_string() || selection_is_litteral_number()
+selection_is_litteral <- function(type = NA) {
+  if (!selection_is_parsable(multi_ok = FALSE)) return(FALSE)
+  if(is.symbol(current_call())) return(FALSE)
+  if(is.na(type)) TRUE else is(current_call(), type)
 }
 
 #' @export
@@ -105,7 +101,8 @@ selection_is_reserved_word <-  function() {
 
 #' @export
 #' @rdname condition-helpers
-selection_is_symbol <- function(litteral_ok = FALSE, reserved_ok = FALSE) {
+selection_is_symbol <- function(
+  litteral_ok = FALSE, reserved_ok = FALSE) {
   if(!litteral_ok && selection_is_litteral()) return(FALSE)
   if(!reserved_ok && selection_is_reserved_word()) return(FALSE)
   selection_is_parsable(multi_ok = FALSE) && is.symbol(current_call())
@@ -113,7 +110,11 @@ selection_is_symbol <- function(litteral_ok = FALSE, reserved_ok = FALSE) {
 
 #' @export
 #' @rdname condition-helpers
-selection_is_call <- function(symbol_ok = FALSE, litteral_ok = FALSE, reserved_ok = FALSE) {
+selection_is_call <- function(
+  symbol_ok = FALSE, litteral_ok = FALSE, reserved_ok = FALSE,
+  target = c("default", "lines", "file")
+  ) {
+  target <- match.arg(target)
   if(!symbol_ok && selection_is_symbol()) return(FALSE)
   if(!litteral_ok && selection_is_litteral()) return(FALSE)
   if(!reserved_ok && selection_is_reserved_word()) return(FALSE)
@@ -128,7 +129,14 @@ selection_is_simple_call <- function() {
   )
 }
 
-# selection_contains_symbols(symbols=)
+#' @export
+#' @rdname condition-helpers
+selection_contains_string <- function(
+  pattern, n_min = 1L, n_max= Inf, target = c("default", "lines", "file"), ...) {
+  target <- match.arg(target)
+  sum_ <- sum(regexpr(pattern, current_selection(), ...))
+  sum_ >= n_min && sum_ <= n_max
+}
 
 #' @export
 #' @rdname condition-helpers
@@ -136,106 +144,58 @@ selection_inherits <- function(class) {
   selection_is_evaluable() && inherits(current_value(), class)
 }
 
-
 #' @export
 #' @rdname condition-helpers
 selection_is_function <- function() {
-  selection_is_evaluable() && is.function(current_value())
+  selection_inherits("function")
 }
-
-# selection_is_data_frame()
 
 #' @export
 #' @rdname condition-helpers
 selection_is_data_frame <- function() {
-  selection_is_evaluable() && is.data.frame(current_value())
+  selection_inherits("data.frame")
 }
-
-# selection_is_ggplot()
-
-# selection_is_installed_package()
-# selection_is_cran_package(with_github_link = FALSE)
-# selection_is_in_rmd_chunk()
-# selection_is_in_rmd_text()
-# project_is_package()
-# project_uses_git()
-# project_uses_github()
-# project_uses_github_actions()
-# project_uses_renv()
-# project_has_license(license = NULL)
-# file_is_r_script()
-# file_is_rmd()
-# file_is_rprofile()
-# file_is_renviron()
-# file_has_extention(ext=)
-
-
-
-
 
 #' @export
 #' @rdname condition-helpers
-project_is_package <- function(
-  # uses_git = NA,
-  # uses_github = NA,
-  # uses_c = NA,
-  # uses_cran_comments = NA
-  ) {
-  # mainly built around usethis features
-  # We can add infinite features here but should keep them relevant to poof tricks
-  # as much as possible
-  # TODO:
-  # uses_license, can be a license name or logical
-  # uses_cpp11
-  # uses_citation
-  # uses_coverage
-  # uses_cran_badge
-  # uses_github_actions
-
-  package_bool <- file.exists("DESCRIPTION")
-  if(!package_bool) return(FALSE)
-  # if(!is.na(uses_git)) {
-  #   git_bool <- file.exists(".gitignore")
-  #   if(uses_git != git_bool) return(FALSE)
-  # }
-  # if(!is.na(uses_github)) {
-  #   github_bool <- any(grepl("^URL: https://github.com/", readLines("DESCRIPTION")))
-  #   if(uses_github != github_bool) return(FALSE)
-  # }
-  # if(!is.na(uses_c)) {
-  #   c_bool <- dir.exists("src")
-  #   if(uses_c != c_bool) return(FALSE)
-  # }
-  # if(!is.na(uses_cran_comments)) {
-  #   cran_comments_bool <- file.exists("cran-comments.md")
-  #   if(uses_cran_comments != cran_comments_bool) return(FALSE)
-  # }
-  TRUE
+selection_is_syntactic_package_name <- function() {
+  # This should contain only (ASCII) letters, numbers and dot, have at least two
+  # characters and start with a letter and not end in a dot
+  selection_is_symbol() &&
+    grepl("^[[:alpha:]][[:alnum:].]*[^.]$", current_selection())
 }
 
-current_file_is_r_script <- function() {
-  toupper(tools::file_ext(current_path())) == "R"
+#' @export
+#' @rdname condition-helpers
+selection_is_installed_package <- function() {
+  pkgs <- unlist(sapply(
+    .libPaths(), list.dirs, full.names = FALSE, recursive = FALSE),
+    use.names = FALSE)
+  selection_is_symbol() && current_selection() %in% pkgs
 }
 
-current_file_is_rmd <- function() {
-  toupper(tools::file_ext(current_path())) == "RMD"
+#' @export
+#' @rdname condition-helpers
+selection_is_cran_package <- function() { # (with_github_link = FALSE) ?
+  selection_is_symbol() &&
+    RCurl::url.exists(
+      paste0("https://cran.r-project.org/package=", current_selection()))
 }
 
+#' @export
+#' @rdname condition-helpers
+selection_is_in_rmd_chunk <- function() {
+  if (!current_file_is_rmd()) return(FALSE)
+  rmd_rows <-
+    which(as.logical(cumsum(startsWith(current_file_code(), "```")) %% 2))
+  all(current_line_numbers() %in% rmd_rows)
+}
 
-# #' @export
-# #' @rdname condition-helpers
-# add_args <- function(txt, ...) {
-#   poof::replace_selection(deparse(as.call(c(as.list(str2lang(txt)), .groups = 'drop'))))
-# }
-#
-# #' @export
-# #' @rdname condition-helpers
-# eval_sub <- function(txt) {
-#   eval.parent(substitute(debugonce(TXT), list(TXT = as.symbol(txt))))
-# }
-
-
-
-
-
-
+#' @export
+#' @rdname condition-helpers
+selection_is_in_rmd_text <- function() {
+  if (!current_file_is_rmd()) return(FALSE)
+  txt_rows <-
+    which(!cumsum(startsWith(current_file_code(), "```")) %% 2)
+  all(current_line_numbers() %in% txt_rows)
+}

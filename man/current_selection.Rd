@@ -12,17 +12,17 @@
 \alias{current_code_block}
 \title{Current selection}
 \usage{
-current_selection()
+current_selection(target = c("default", "lines", "file"))
 
-current_call()
+current_call(target = c("default", "lines", "file"))
 
-current_expr()
+current_expr(target = c("default", "lines", "file"))
 
-current_value()
+current_value(target = c("default", "lines", "file"))
 
-current_line_numbers()
+current_line_numbers(target = c("default", "lines", "file"))
 
-current_lines()
+current_lines(target = c("default", "lines", "file"))
 
 current_path(full = TRUE)
 
