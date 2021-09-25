@@ -6,12 +6,14 @@
 #'
 #' Utilities to get data about the selection
 #'
+#' @param target If `target` is `"lines"` the selection is extended to lines,
+#'   if it is `"script"` it is extended to the full script
 #' @param full boolean. Whether to return full path or base name
 #' @export
-current_selection <- function(target = c("default", "lines", "file")) {
+current_selection <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   if(target == "lines") return(paste(current_lines(), collapse="\n"))
-  if(target == "file") return(paste(current_file_code(), collapse="\n"))
+  if(target == "script") return(paste(current_file_code(), collapse="\n"))
   context       <- rstudioapi::getSourceEditorContext()
   selection_txt <- rstudioapi::primary_selection(context)[["text"]]
   selection_txt
@@ -26,14 +28,14 @@ current_env <- function() {
 
 #' @export
 #' @rdname current_selection
-current_call <- function(target = c("default", "lines", "file")) {
+current_call <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   str2lang(current_selection())
 }
 
 #' @export
 #' @rdname current_selection
-current_expr <- function(target = c("default", "lines", "file")) {
+current_expr <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   expr <- parse(text = current_selection(target))
   if(length(expr) == 1) return(expr[[1]])
@@ -42,17 +44,17 @@ current_expr <- function(target = c("default", "lines", "file")) {
 
 #' @export
 #' @rdname current_selection
-current_value <- function(target = c("default", "lines", "file")) {
+current_value <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   eval(current_expr(target), current_env())
 }
 
 #' @export
 #' @rdname current_selection
-current_line_numbers <- function(target = c("default", "lines", "file")) {
+current_line_numbers <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   context       <- rstudioapi::getSourceEditorContext()
-  if(target == "file") return(seq_along(context$contents))
+  if(target == "script") return(seq_along(context$contents))
   start_row <- context$selection[[1]]$range$start[["row"]]
   end_row <- context$selection[[1]]$range$end[["row"]]
   start_row:end_row
@@ -60,9 +62,9 @@ current_line_numbers <- function(target = c("default", "lines", "file")) {
 
 #' @export
 #' @rdname current_selection
-current_lines <- function(target = c("default", "lines", "file")) {
+current_lines <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
-  if(target == "file") return(current_file_code())
+  if(target == "script") return(current_file_code())
   current_file_code()[current_line_numbers()]
 }
 

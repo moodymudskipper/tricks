@@ -14,23 +14,24 @@
 #'   `[[` or `$` are considered. I should be used on condition calls to make sure
 #'   we never evaluate a call that would have side effects.
 #' @param class class used to check inheritance
+#' @inheritParams current_selection
 #' @export
 #' @name condition-helpers
-selection_is_empty <- function(target = c("default", "lines", "file")) {
+selection_is_empty <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   current_selection(target) == ""
 }
 
 #' @export
 #' @rdname condition-helpers
-selection_is_comment_line <- function(target = c("default", "lines", "file")) {
+selection_is_comment_line <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   grepl("^ *#[^\n]*?$",  current_selection(target))
 }
 
 #' @export
 #' @rdname condition-helpers
-selection_is_comment_block <- function(target = c("default", "lines", "file")) {
+selection_is_comment_block <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   grepl("^( *#[^\n]*\n)* *#[^\n]*?$",  current_selection(target))
 }
@@ -43,14 +44,14 @@ selection_is_comment_block <- function(target = c("default", "lines", "file")) {
 
 #' @export
 #' @rdname condition-helpers
-selection_is_n_lines <- function(n, target = c("default", "lines", "file")) {
+selection_is_n_lines <- function(n, target = c("default", "lines", "script")) {
   target <- match.arg(target)
   length(current_line_numbers()) == n
 }
 
 #' @export
 #' @rdname condition-helpers
-selection_is_single_line <- function(target = c("default", "lines", "file")) {
+selection_is_single_line <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   selection_is_n_lines(1, target)
 }
@@ -58,7 +59,7 @@ selection_is_single_line <- function(target = c("default", "lines", "file")) {
 #' @export
 #' @rdname condition-helpers
 selection_is_parsable <- function(multi_ok = TRUE, single_ok = TRUE, symbol_ok = TRUE,
-                                  target = c("default", "lines", "file")) {
+                                  target = c("default", "lines", "script")) {
   target <- match.arg(target)
   res <- (
     single_ok &&  !fails(current_call(target))
@@ -74,7 +75,7 @@ selection_is_parsable <- function(multi_ok = TRUE, single_ok = TRUE, symbol_ok =
 
 #' @export
 #' @rdname condition-helpers
-selection_is_evaluable <- function(simple_only = FALSE, target = c("default", "lines", "file")) {
+selection_is_evaluable <- function(simple_only = FALSE, target = c("default", "lines", "script")) {
   target <- match.arg(target)
   if(simple_only) {
     selection_is_simple_call() && !fails(current_value(target))
@@ -112,7 +113,7 @@ selection_is_symbol <- function(
 #' @rdname condition-helpers
 selection_is_call <- function(
   symbol_ok = FALSE, litteral_ok = FALSE, reserved_ok = FALSE,
-  target = c("default", "lines", "file")
+  target = c("default", "lines", "script")
   ) {
   target <- match.arg(target)
   if(!symbol_ok && selection_is_symbol()) return(FALSE)
@@ -132,7 +133,7 @@ selection_is_simple_call <- function() {
 #' @export
 #' @rdname condition-helpers
 selection_contains_string <- function(
-  pattern, n_min = 1L, n_max= Inf, target = c("default", "lines", "file"), ...) {
+  pattern, n_min = 1L, n_max= Inf, target = c("default", "lines", "script"), ...) {
   target <- match.arg(target)
   sum_ <- sum(regexpr(pattern, current_selection(), ...))
   sum_ >= n_min && sum_ <= n_max

@@ -12,17 +12,17 @@
 \alias{current_code_block}
 \title{Current selection}
 \usage{
-current_selection(target = c("default", "lines", "file"))
+current_selection(target = c("default", "lines", "script"))
 
-current_call(target = c("default", "lines", "file"))
+current_call(target = c("default", "lines", "script"))
 
-current_expr(target = c("default", "lines", "file"))
+current_expr(target = c("default", "lines", "script"))
 
-current_value(target = c("default", "lines", "file"))
+current_value(target = c("default", "lines", "script"))
 
-current_line_numbers(target = c("default", "lines", "file"))
+current_line_numbers(target = c("default", "lines", "script"))
 
-current_lines(target = c("default", "lines", "file"))
+current_lines(target = c("default", "lines", "script"))
 
 current_path(full = TRUE)
 
@@ -31,6 +31,9 @@ current_file_code()
 current_code_block()
 }
 \arguments{
+\item{target}{If \code{target} is \code{"lines"} the selection is extended to lines,
+if it is \code{"script"} it is extended to the full script}
+
 \item{full}{boolean. Whether to return full path or base name}
 }
 \description{
