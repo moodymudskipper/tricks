@@ -5,7 +5,7 @@ local({
   # identify functions to memoise
   env <- parent.frame(2)
   funs     <- ls(envir = env)
-  funs     <- grep("^selection_|^current_|^project_|^clipboard_", funs, value = TRUE)
+  funs     <- grep("^selection_|^current_|^project_|^clipboard_|^system_", funs, value = TRUE)
 
   # memoise them
   txt <- paste0(funs, " <- memoise::memoise(", funs, ")")
