@@ -37,3 +37,4 @@ fake_selection <- function(new_selection) {
   env$value_[[1]][[1]] <- new_selection
   current_selection()
   invisible()
+}
