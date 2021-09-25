@@ -89,8 +89,9 @@ selection_is_evaluable <- function(simple_only = FALSE, target = c("default", "l
 #' @export
 #' @rdname selection-condition-helpers
 selection_is_litteral <- function(type = NA) {
-  if (!selection_is_parsable(multi_ok = FALSE)) return(FALSE)
-  if(is.symbol(current_call())) return(FALSE)
+  if (!selection_is_parsable(multi_ok = FALSE) ||
+      is.call(current_call()) ||
+      is.symbol(current_call())) return(FALSE)
   if(is.na(type)) TRUE else is(current_call(), type)
 }
 
