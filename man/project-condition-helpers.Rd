@@ -3,12 +3,12 @@
 \name{project_is_package}
 \alias{project_is_package}
 \alias{project_uses_git}
-\title{project helpers}
+\title{Project Focused Condition Helpers}
 \usage{
 project_is_package()
 
 project_uses_git()
 }
 \description{
-project helpers
+Project Focused Condition Helpers
 }

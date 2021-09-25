@@ -1,4 +1,4 @@
-#' Condition Helpers
+#' Selection Focused Condition Helpers
 #'
 #' These helpers are meant to be used on the left hand side of the trick specification,
 #' to filter which tricks the addin should display.

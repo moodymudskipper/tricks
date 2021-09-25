@@ -22,7 +22,7 @@
 \alias{selection_is_cran_package}
 \alias{selection_is_in_rmd_chunk}
 \alias{selection_is_in_rmd_text}
-\title{Condition Helpers}
+\title{Selection Focused Condition Helpers}
 \usage{
 selection_is_empty(target = c("default", "lines", "script"))
 

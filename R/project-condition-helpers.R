@@ -1,4 +1,4 @@
-#' project helpers
+#' Project Focused Condition Helpers
 #' @export
 #' @rdname project-condition-helpers
 project_is_package <- function() {
