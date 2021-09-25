@@ -2,11 +2,10 @@
 # We automate the proces for convenience, it includes building programatically
 # a `forget_all()` function
 local({
-  # identify functions to memois
+  # identify functions to memoise
   env <- parent.frame(2)
   funs     <- ls(envir = env)
-  patterns <- c("^selection_", "^current_", "^project_", "^clipboard_", "^fails$")
-  funs     <- grep("^selection_|^current_|^project_|^clipboard_|^fails$", funs, value = TRUE)
+  funs     <- grep("^selection_|^current_|^project_|^clipboard_", funs, value = TRUE)
 
   # memoise them
   txt <- paste0(funs, " <- memoise::memoise(", funs, ")")
