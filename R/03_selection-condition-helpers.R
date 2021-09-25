@@ -180,7 +180,7 @@ selection_is_installed_package <- function() {
 #' @export
 #' @rdname selection-condition-helpers
 selection_is_cran_package <- function() { # (with_github_link = FALSE) ?
-  selection_is_symbol() &&
+  selection_is_syntactic_package_name() &&
     RCurl::url.exists(
       paste0("https://cran.r-project.org/package=", current_selection()))
 }
