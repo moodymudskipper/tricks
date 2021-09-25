@@ -4,7 +4,7 @@
 clipboard_contains_text <- function() {
   w <- options(warn = 2)
   on.exit(options(warn = w$warn))
-  !fails(clipboard_contains_text())
+  !fails(clipboard_text())
 }
 
 #' @export
