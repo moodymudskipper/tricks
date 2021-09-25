@@ -16,48 +16,48 @@
 #' @param class class used to check inheritance
 #' @inheritParams current_selection
 #' @export
-#' @name condition-helpers
+#' @name selection-condition-helpers
 selection_is_empty <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   current_selection(target) == ""
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_comment_line <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   grepl("^ *#[^\n]*?$",  current_selection(target))
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_comment_block <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   grepl("^( *#[^\n]*\n)* *#[^\n]*?$",  current_selection(target))
 }
 
 # #' @export
-# #' @rdname condition-helpers
+# #' @rdname selection-condition-helpers
 # n_lines <- function(txt) {
 #   length(current_line_numbers())
 # }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_n_lines <- function(n, target = c("default", "lines", "script")) {
   target <- match.arg(target)
   length(current_line_numbers()) == n
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_single_line <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   selection_is_n_lines(1, target)
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_parsable <- function(multi_ok = TRUE, single_ok = TRUE, symbol_ok = TRUE,
                                   target = c("default", "lines", "script")) {
   target <- match.arg(target)
@@ -74,7 +74,7 @@ selection_is_parsable <- function(multi_ok = TRUE, single_ok = TRUE, symbol_ok =
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_evaluable <- function(simple_only = FALSE, target = c("default", "lines", "script")) {
   target <- match.arg(target)
   if(simple_only) {
@@ -85,7 +85,7 @@ selection_is_evaluable <- function(simple_only = FALSE, target = c("default", "l
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_litteral <- function(type = NA) {
   if (!selection_is_parsable(multi_ok = FALSE)) return(FALSE)
   if(is.symbol(current_call())) return(FALSE)
@@ -93,7 +93,7 @@ selection_is_litteral <- function(type = NA) {
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_reserved_word <-  function() {
   current_selection() %in% c(
     "if", "else", "repeat", "while", "function" ,"for" ,"in", "next", "break",
@@ -101,7 +101,7 @@ selection_is_reserved_word <-  function() {
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_symbol <- function(
   litteral_ok = FALSE, reserved_ok = FALSE) {
   if(!litteral_ok && selection_is_litteral()) return(FALSE)
@@ -110,7 +110,7 @@ selection_is_symbol <- function(
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_call <- function(
   symbol_ok = FALSE, litteral_ok = FALSE, reserved_ok = FALSE,
   target = c("default", "lines", "script")
@@ -131,7 +131,7 @@ selection_is_simple_call <- function() {
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_contains_string <- function(
   pattern, n_min = 1L, n_max= Inf, target = c("default", "lines", "script"), ...) {
   target <- match.arg(target)
@@ -140,25 +140,25 @@ selection_contains_string <- function(
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_inherits <- function(class) {
   selection_is_evaluable() && inherits(current_value(), class)
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_function <- function() {
   selection_inherits("function")
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_data_frame <- function() {
   selection_inherits("data.frame")
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_syntactic_package_name <- function() {
   # This should contain only (ASCII) letters, numbers and dot, have at least two
   # characters and start with a letter and not end in a dot
@@ -167,7 +167,7 @@ selection_is_syntactic_package_name <- function() {
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_installed_package <- function() {
   pkgs <- unlist(sapply(
     .libPaths(), list.dirs, full.names = FALSE, recursive = FALSE),
@@ -176,7 +176,7 @@ selection_is_installed_package <- function() {
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_cran_package <- function() { # (with_github_link = FALSE) ?
   selection_is_symbol() &&
     RCurl::url.exists(
@@ -184,7 +184,7 @@ selection_is_cran_package <- function() { # (with_github_link = FALSE) ?
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_in_rmd_chunk <- function() {
   if (!current_file_is_rmd()) return(FALSE)
   rmd_rows <-
@@ -193,7 +193,7 @@ selection_is_in_rmd_chunk <- function() {
 }
 
 #' @export
-#' @rdname condition-helpers
+#' @rdname selection-condition-helpers
 selection_is_in_rmd_text <- function() {
   if (!current_file_is_rmd()) return(FALSE)
   txt_rows <-
