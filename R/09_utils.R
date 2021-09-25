@@ -11,13 +11,15 @@
 #' @param call A call
 #' @export
 fails <- function(call) {
-  capture.output(res <- suppressMessages(suppressWarnings(
-    eval.parent(substitute(
-      inherits(try(call, silent = TRUE), "try-error"),
+  pf <- parent.frame()
+  capture.output(
+    res <- suppressMessages(suppressWarnings(
+    eval(substitute(try(call, silent = TRUE),
       environment()
-    ))
-  )))
-  res
+    ), pf)
+  ))
+  )
+  inherits(res, "try-error")
 }
 
 fetch_current_hotkey <- function() {
