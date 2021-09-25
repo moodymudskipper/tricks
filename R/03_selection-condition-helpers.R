@@ -58,9 +58,11 @@ selection_is_single_line <- function(target = c("default", "lines", "script")) {
 
 #' @export
 #' @rdname selection-condition-helpers
-selection_is_parsable <- function(multi_ok = TRUE, single_ok = TRUE, symbol_ok = TRUE,
-                                  target = c("default", "lines", "script")) {
+selection_is_parsable <- function(
+  multi_ok = TRUE, single_ok = TRUE, symbol_ok = TRUE, empty_ok = FALSE,
+  target = c("default", "lines", "script")) {
   target <- match.arg(target)
+  if(!empty_ok && selection_is_empty()) return(FALSE)
   res <- (
     single_ok &&  !fails(current_call(target))
   ) || (
