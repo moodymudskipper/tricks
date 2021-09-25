@@ -11,7 +11,7 @@
 #' @param litteral_ok Are literal strings or numbers eligible ?
 #' @param reserved_ok Are reserved words eligible ?
 #' @param simple_only if `TRUE`, only symbols and calls to `::`, `:::`, `[`,
-#'   `[[` or `$` are considered. I should be used on condition calls to make sure
+#'   `[[` or `$` are considered. It should be used on condition calls to make sure
 #'   we never evaluate a call that would have side effects.
 #' @param class class used to check inheritance
 #' @inheritParams current_selection
