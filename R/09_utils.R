@@ -5,12 +5,19 @@
 #' for some custom trick conditions. Use this with caution! The tested call is run
 #' so you don't want it to have potential side effects or be slow!
 #'
+#' The potential failure will be totally silent (no printed output, no error, no message, no warning).
+#' Other side effects should not be an issues if the function is used properly.
+#'
 #' @param call A call
 #' @export
 fails <- function(call) {
-  eval.parent(substitute(
-    inherits(try(call, silent = TRUE), "try-error")
-  ))
+  capture.output(res <- suppressMessages(suppressWarnings(
+    eval.parent(substitute(
+      inherits(try(call, silent = TRUE), "try-error"),
+      environment()
+    ))
+  )))
+  res
 }
 
 fetch_current_hotkey <- function() {
@@ -21,3 +28,12 @@ fetch_current_hotkey <- function() {
   }
   jsonlite::fromJSON(path)[["poof::addin"]]
 }
+
+fake_selection <- function(new_selection) {
+  forget_all()
+  current_selection()
+  encl <- environment(current_selection)
+  env <- environment(encl$`_cache`$get)
+  env$value_[[1]][[1]] <- new_selection
+  current_selection()
+  invisible()
