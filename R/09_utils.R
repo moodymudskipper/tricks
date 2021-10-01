@@ -40,3 +40,7 @@ fake_selection <- function(new_selection) {
   current_selection()
   invisible()
 }
+
+called_through_snippets <- function() {
+  identical(.rs.rpc.transform_snippet, sys.calls()[[c(1,1)]])
+}

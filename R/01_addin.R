@@ -1,13 +1,21 @@
-# maybe we don't need the .txt etc, and we can replace the .sub by the bquote notation
+# to avoid RStudio's margin warning
+forget_all <- NULL
 
 #' addin
 #' @importFrom utils getFromNamespace select.list
 #' @export
 addin <- function() {
+  if(called_through_snippets()) {
+    # snippets hide the output, we free it here
+    sink()
+    # and sink again just to avoid being warned that there's nothing to unsink
+    file <- textConnection("rval", "w", local = TRUE)
+    on.exit(sink(file, type = "output", split = FALSE))
+  }
   # make all functions available for the time of the call
   if(!"package:poof" %in% search()) {
     library(poof)
-    on.exit(detach("package:poof"))
+    on.exit(detach("package:poof"), add = TRUE)
   }
   # reset all memoised functions
   forget_all()
@@ -16,31 +24,15 @@ addin <- function() {
   current_selection()
 
   opts <- getOption("poof.tricks")
+  if(is.null(opts)) {
+    message("No actions were defined for this addin")
+    return(invisible(NULL))
+  }
 
   # test all conditions to filter eligible tricks
   eval_cond <- function(nm) {
     x <- opts[[nm]]
-    #print(x)
-    #browser()
     lhs_call <- x[[2]]
-    # vars <- all.vars(x)
-    # if(!selection_is_parsable()) {
-    #   if (any(c(".val", ".lng", ".sub") %in% vars)) return(FALSE)
-    #   lhs_call <- do.call(substitute, list(lhs_call, list(
-    #     .txt = current_selection())))
-    # } else if(!selection_is_evaluable(simple_only = TRUE)) {
-    #   if (".val" %in% vars) return(FALSE)
-    #   lhs_call <- do.call(substitute, list(lhs_call, list(
-    #     .txt = current_selection(),
-    #     .lng = call("quote", current_expr()),
-    #     .sub = current_expr())))
-    # } else {
-    #   lhs_call <- do.call(substitute, list(lhs_call, list(
-    #     .txt = current_selection(),
-    #     .lng = call("quote", current_expr()),
-    #     .sub = current_expr(),
-    #     .val = current_value())))
-    # }
     res <- try(eval(lhs_call, env), silent = TRUE)
     if(inherits(res, "try-error")) {
       warning(
@@ -52,26 +44,16 @@ addin <- function() {
     res
   }
 
-  #browser()
   conds <- sapply(names(opts), eval_cond)
   if(!any(conds)) {
     message("No tricks to show for this selection")
     return(invisible(NULL))
   }
-  #browser()
-  # send cursor to console
+
   rstudioapi::sendToConsole("", FALSE)
   names(opts)[conds] <- sapply(
     names(opts[conds]),
     glue::glue, .envir =env)
-  # ,
-  #   .envir = list(.txt = current_selection())    #   eval(bquote(list(
-    #   .txt = .(selection_txt),
-    #   .lng = quote(.(substitute(CALL, list(CALL = selection_lng)))),
-    #   .sub = .(substitute(quote(CALL), list(CALL = selection_lng))),
-    #   .val = .(selection_val)
-    # )))
-    # )
 
   opt_nm <- select.list(names(opts[conds]))
   if(opt_nm == "") {
@@ -80,15 +62,6 @@ addin <- function() {
   }
   # extract action call
   rhs_call <- opts[[opt_nm]][[3]]
-
-  # vars <- all.vars(rhs_call)
-  # substitute_list <- list(.txt = current_selection())
-  #
-  # if(".val" %in% vars) substitute_list[[".val"]] <- current_value()
-  # if(".lng" %in% vars) substitute_list[[".lng"]] <- call("quote", current_expr())
-  # if(".val" %in% vars) substitute_list[[".sub"]] <- current_expr()
-  #
-  # rhs_call <- do.call(substitute, list(rhs_call, substitute_list))
   rhs_call <- do.call(bquote, list(rhs_call))
 
   eval(rhs_call, env)
