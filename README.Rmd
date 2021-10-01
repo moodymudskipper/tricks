@@ -49,59 +49,95 @@ to define them :
 poof::add_tricks("<name1>" = <condition1> ~ <action1>, "<name2>" = <condition2> ~ <action2>, ...)
 ```
 
-* Each condition will be called on the selection and determine if the trick should be considered
-* Once a trick is selected, its action will be triggered
+* Tricks which have their condition verified will be proposed, and once selected
+their action will be triggered.
 
+Let's build as an example featuring:
+
+* an action to edit our .RProfile, proposed when the selection is empty
+* an action to trigger the reprex addin, proposed when valid code is selected 
+* an action to allign comments, proposed when commented lines are selected
 For example let's set up 3 tricks : 
+* an action to run debugonce on the selected function 
 
-* run `devtools::load_all()`
-* turn comments to upper case
-* run a reprex on the selection, using the existing addin
+The code will look as below:
 
 ```{r}
 poof::add_tricks(
-  "Load all" =
-    selection_is_empty() ~ # only consider if no selection
-    devtools::load_all(),  # call load_all()
-  "Turn comments to upper case" =
-    selection_is_comment_block() ~                   # only consider if selection is a comment block
-    replace_selection(toupper(current_selection())), # replace selection with upper case
+  "Edit '.Rprofile'" =
+    selection_is_empty() ~     # condition : no selection
+    usethis::edit_r_profile(), # action    : call packaged function 
+  
   "Reprex selection" =
-    TRUE ~                                          # always consider
-    poof::call_addin("reprex", "Reprex selection")  # call existing addin
+    selection_is_parsable(symbol_ok = FALSE) ~  # condition : selection is code
+    call_addin("reprex", "Reprex selection"),   # action    : call existing addin
+
+  "allign comments" =
+    # condition : selection, extended to full lines, contains at least 2 comments
+    selection_contains_string("#", n_min = 2, target = "lines") ~
+    # action    : write custom code to replace current one
+    local({
+      code <- current_lines()
+      pos <- regexpr("#", code)
+      pad <- max(pos) - pos
+      code <- mapply(function(x, n) sub("#", paste0(strrep(" ", n), "#"), x), code, pad)
+      replace_current_lines(code)
+    }),
+  
+  # name : here using glue syntax to have dynamic action names
+  "debugonce({current_selection()})" = 
+    # condition : selection evaluates to function
+    selection_is_function() ~ 
+    # action    : run debugonce, we use `bquote()`'s `.()` notation to work around NSE issues
+    debugonce(.(current_call())),      
 )
 ```
+
 
 ![](man/figures/poof1.gif)
 
-`selection_is_empty()` and `selection_is_comment_block()` are condition helpers, 
-there are more of them and they're documented in `?"condition-helpers"`. 
+`selection_is_empty()` and `selection_is_parsable()` are condition helpers, 
+they return `TRUE` or `FALSE`. There are more of them and they're documented in `?"condition-helpers"`. 
+
+Here are some of them : 
+
+```{r}
+selection_is_empty
+selection_is_comment_block
+selection_is_call
+selection_is_function
+selection_is_data_frame
+selection_inherits
+selection_is_in_rmd_chunk
+selection_is_in_rmd_text
+selection_is_symbol
+selection_is_syntactic_package_name
+selection_is_cran_package
+selection_is_installed_package
+current_file_is_r_script
+current_file_is_rmd
+clipboard_contains_text
+clipboard_is_parsable
+clipboard_text
+project_is_package
+project_uses_git
+system_has_internet
+```
+
+`current_lines()` is a selection helper, selection helpers return an output related
+to the selection, some more examples are:
+
+```{r}
+current_selection
+current_call
+current_value
+current_code_block
+current_expr
+current_path
+```
 
 `replace_selection()` and  `call_addin()` are action helpers and they're documented in `?"action-helpers"`
 
-`.txt` is the selected text, we can also use `.lng`, `.val` and `.sub` on both
-sides of the formula : 
-
-* `.lng` is the parsed expression, equivalent to `str2lang(.txt)`
-* `.val` is the value, equivalent to `eval(.lng)`
-* `.sub` is used to substitute the selection in the action
-
-If the selection is not parsable, conditions that use  `.lng`,or `.sub` will return `FALSE`.
-
-If the selection is not parsable, simple (see note at the bottom of this section)
-and evaluable, conditions that use `.val` will return `FALSE`.
-
-It might seem complex but it's intuitive in practice. Let's use `.lng` to improve
-our reprex trick above. We don't need the reprex trick all the time but only if we selected
-a valid call, thus we can formulate it this way : 
-
-```{r}
-poof::add_tricks(
-  "Reprex selection" =
-    is.call(.lng) ~                                 # consider only parsable calls
-    poof::call_addin("reprex", "Reprex selection")  # call existing addin
-)
-```
 
 ![](man/figures/poof2.gif)
 

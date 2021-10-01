@@ -52,11 +52,11 @@ For example let’s set up 3 tricks :
 ``` r
 poof::add_tricks(
   "Load all" =
-    .txt == "" ~           # only consider if no selection
+    selection_is_empty() ~ # only consider if no selection
     devtools::load_all(),  # call load_all()
   "Turn comments to upper case" =
-    poof::is_comment_block(.txt) ~          # only consider if selection is a comment block
-    poof::replace_selection(toupper(.txt)), # replace selection with upper case
+    selection_is_comment_block() ~                   # only consider if selection is a comment block
+    replace_selection(toupper(current_selection())), # replace selection with upper case
   "Reprex selection" =
     TRUE ~                                          # always consider
     poof::call_addin("reprex", "Reprex selection")  # call existing addin
@@ -65,10 +65,12 @@ poof::add_tricks(
 
 ![](man/figures/poof1.gif)
 
-`poof::is_comment_block()` is a condition helper, there are more of them
-and they’re documented in `?"condition-helpers"`.
-`poof::replace_selection()` and `poof::call_addin()` are action helpers
-and they’re documented in `?"action-helpers"`
+`selection_is_empty()` and `selection_is_comment_block()` are condition
+helpers, there are more of them and they’re documented in
+`?"condition-helpers"`.
+
+`replace_selection()` and `call_addin()` are action helpers and they’re
+documented in `?"action-helpers"`
 
 `.txt` is the selected text, we can also use `.lng`, `.val` and `.sub`
 on both sides of the formula :
@@ -79,6 +81,8 @@ on both sides of the formula :
 
 If the selection is not parsable, conditions that use `.lng`,or `.sub`
 will return `FALSE`.
+
+![kitty](https://media4.giphy.com/media/cfuL5gqFDreXxkWQ4o/giphy-downsized.gif)
 
 If the selection is not parsable, simple (see note at the bottom of this
 section) and evaluable, conditions that use `.val` will return `FALSE`.
@@ -106,7 +110,7 @@ And let’s illustrate `.val` and `.sub` with a last example, a trick to
   - It should be considered only when selecting a function so we’ll have
     a condition on the value `.val`
   - The action uses the function `debugonce()` which uses non standard
-    evaluation, but this is made easy using `.sub`
+    evaluation, but this is made easy using `.sub`.
 
 <!-- end list -->
 
