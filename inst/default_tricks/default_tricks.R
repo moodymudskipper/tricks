@@ -23,7 +23,7 @@ poof::add_tricks(
     clipboard_contains_text() &&
     !clipboard_is_parsable() &&
     !fails(datapasta::tribble_construct()) ~
-    replace_selection(datapasta::tribble_paste()),
+    replace_selection(datapasta::tribble_construct()),
 
   "Lint current file with 'lintr'" =
     selection_is_empty() ~
@@ -68,7 +68,7 @@ poof::add_tricks(
     remotes::install_cran(current_selection(), upgrade = "ask"),
 
   "Install '{current_selection()}' package  from github" =
-    selection_is_symbol() ~
+    selection_is_cran_package()  ~
     remotes::install_github(paste(strsplit(usethis:::github_url(current_selection()), "/")[[1]][4:5], collapse = "/"), upgrade = "ask"),
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -117,6 +117,17 @@ poof::add_tricks(
   "Explode call wih `boomer::boom()`" =
     selection_is_call()  ~
     call_addin("boomer", "Explode a call wih `boom()`"),
+
+  "Refactor code wih 'refactor' package" =
+    selection_is_call() ~
+    replace_selection(paste(styler::style_text(
+      paste(
+        "{\n",
+        current_selection(),
+        "\n\n#~ for {refactor}:\nrm()\n} %refactor% {\n",
+        current_selection(),
+        "\n\n#~ for {refactor}:\nrm()\n}")
+    ), collapse = "\n")),
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # selecting multiline code
   "Reprex selection" =
@@ -131,7 +142,7 @@ poof::add_tricks(
     clipr::write_clip(.(current_call())),
 
   "Style selection wih 'styler'" =
-    selection_is_parsable() ~
+    selection_is_parsable(symbol_ok = FALSE) ~
     call_addin("styler", "Style selection"),
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # initiate the first iteration of for loop
