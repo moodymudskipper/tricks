@@ -1,5 +1,5 @@
 
-# not sure if we really need curren_lines or current_file_code in the end,
+# not sure if we really need curren_lines or document_code in the end,
 # now he only difference is we don't collapse with "\n"
 
 #' Current selection
@@ -13,7 +13,7 @@
 current_selection <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
   if(target == "lines") return(paste(current_lines(), collapse="\n"))
-  if(target == "script") return(paste(current_file_code(), collapse="\n"))
+  if(target == "script") return(paste(document_code(), collapse="\n"))
   context       <- rstudioapi::getSourceEditorContext()
   selection_txt <- rstudioapi::primary_selection(context)[["text"]]
   selection_txt
@@ -64,8 +64,8 @@ current_line_numbers <- function(target = c("default", "lines", "script")) {
 #' @rdname current_selection
 current_lines <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
-  if(target == "script") return(current_file_code())
-  current_file_code()[current_line_numbers()]
+  if(target == "script") return(document_code())
+  document_code()[current_line_numbers()]
 }
 
 #' @export
@@ -80,7 +80,7 @@ current_path <- function(full = TRUE) {
 
 #' @export
 #' @rdname current_selection
-current_file_code <- function() {
+document_code <- function() {
   context <- rstudioapi::getSourceEditorContext()
   context$contents
 }
@@ -88,7 +88,7 @@ current_file_code <- function() {
 #' @export
 #' @rdname current_selection
 current_code_block <- function() {
-  code <- current_file_code()
+  code <- document_code()
   ind <- current_line_numbers()
   errors <- sapply(seq_along(code), function(i) {
     parsed <- try(parse(text = code[1:i]), silent = TRUE)

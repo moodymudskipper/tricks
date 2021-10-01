@@ -8,7 +8,7 @@
 \alias{current_line_numbers}
 \alias{current_lines}
 \alias{current_path}
-\alias{current_file_code}
+\alias{document_code}
 \alias{current_code_block}
 \title{Current selection}
 \usage{
@@ -26,7 +26,7 @@ current_lines(target = c("default", "lines", "script"))
 
 current_path(full = TRUE)
 
-current_file_code()
+document_code()
 
 current_code_block()
 }

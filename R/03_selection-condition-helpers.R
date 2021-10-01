@@ -189,17 +189,17 @@ selection_is_cran_package <- function() { # (with_github_link = FALSE) ?
 #' @export
 #' @rdname selection-condition-helpers
 selection_is_in_rmd_chunk <- function() {
-  if (!current_file_is_rmd()) return(FALSE)
+  if (!document_is_rmd()) return(FALSE)
   rmd_rows <-
-    which(as.logical(cumsum(startsWith(current_file_code(), "```")) %% 2))
+    which(as.logical(cumsum(startsWith(document_code(), "```")) %% 2))
   all(current_line_numbers() %in% rmd_rows)
 }
 
 #' @export
 #' @rdname selection-condition-helpers
 selection_is_in_rmd_text <- function() {
-  if (!current_file_is_rmd()) return(FALSE)
+  if (!document_is_rmd()) return(FALSE)
   txt_rows <-
-    which(!cumsum(startsWith(current_file_code(), "```")) %% 2)
+    which(!cumsum(startsWith(document_code(), "```")) %% 2)
   all(current_line_numbers() %in% txt_rows)
 }
