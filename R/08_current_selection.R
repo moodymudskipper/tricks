@@ -70,6 +70,14 @@ current_lines <- function(target = c("default", "lines", "script")) {
 
 #' @export
 #' @rdname current_selection
+current_indentation <- function(target = c("default", "lines", "script")) {
+  line1 <- current_lines(target)
+  chrs <- strsplit(line1, "")[[1]]
+  sum(cumprod(chrs == " "))
+}
+
+#' @export
+#' @rdname current_selection
 current_path <- function(full = TRUE) {
   current_code_block()
   context       <- rstudioapi::getSourceEditorContext()
