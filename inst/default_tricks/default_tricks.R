@@ -118,16 +118,20 @@ poof::add_tricks(
     selection_is_call()  ~
     call_addin("boomer", "Explode a call wih `boom()`"),
 
-  "Refactor code wih 'refactor' package" =
-    selection_is_call() ~
-    replace_selection(paste(styler::style_text(
-      paste(
+  "Refactor chunk wih 'refactor' package" =
+    selection_is_parsable() ~
+    local({
+      new_code <- paste(
         "{\n",
         current_selection(),
-        "\n\n#~ for {refactor}:\nrm()\n} %refactor% {\n",
+        "\n\n#~ for {refactor}:\nrm()\n} %refactor_chunk% {\n",
         current_selection(),
         "\n\n#~ for {refactor}:\nrm()\n}")
-    ), collapse = "\n")),
+      new_code <-
+        styler::style_text(new_code, base_indention = current_indentation())
+      new_code <- paste(new_code, collapse = "\n")
+      replace_current_lines(new_code)
+    }),
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # selecting multiline code
   "Reprex selection" =
