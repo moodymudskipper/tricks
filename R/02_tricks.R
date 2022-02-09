@@ -7,10 +7,33 @@
 #' @export
 add_tricks <- function(..., .reset = FALSE) {
   if(.reset) rm_tricks()
-  new_tricks <- list(...)
-  opts <- getOption("poof.tricks")
-  opts[names(new_tricks)] <- new_tricks
-  options(poof.tricks = opts)
+  new_tricks_lazy <- eval(substitute(alist(...)))
+  # ignore empty args
+  new_tricks_lazy <- Filter(function(x) !identical(x, quote(expr=)), new_tricks_lazy)
+  pf <- parent.frame()
+  new_tricks <- lapply(new_tricks_lazy, eval, pf)
+  check_tricks(new_tricks)
+  # flatten "poof_trick" objects
+  new_tricks <- unlist(new_tricks)
+  tricks <- getOption("poof.tricks")
+  tricks[names(new_tricks)] <- new_tricks
+  options(poof.tricks = tricks)
+}
+
+check_tricks <- function(tricks) {
+  validate_trick <- function(x, nm) {
+    inherits(x, "poof_trick") || (
+      nm != "" && inherits(x, "formula") && length(x) == 3
+    )
+  }
+  validated <- mapply(validate_trick, tricks, allNames(tricks))
+  if(!all(validated)) {
+    stop(
+      "Some tricks were not defined properly.\n",
+      paste(deparse(tricks[!validated]), collapse = "\n"),
+      call. = FALSE
+    )
+  }
 }
 
 #' @rdname add_tricks
@@ -20,9 +43,9 @@ rm_tricks <- function(...) {
   if(!length(nms)) {
     options(poof.tricks = list())
   } else {
-    opts <- getOption("poof.tricks")
-    opts[nms] <- NULL
-    options(poof.tricks = opts)
+    tricks <- getOption("poof.tricks")
+    tricks[nms] <- NULL
+    options(poof.tricks = tricks)
   }
 }
 
@@ -55,27 +78,31 @@ edit_tricks <- function() {
   }
 
   # make all functions available for the time of the call
-  if(!"package:poof" %in% search()) {
-    library(poof)
-    on.exit(detach("package:poof"))
-  }
+  # if(!"package:poof" %in% search()) {
+  #   message("attaching {poof} package")
+  #   library(poof)
+  #   on.exit(detach("package:poof"))
+  # }
+  rstudioapi::sendToConsole("library(poof)")
 
-  choice <- select.list(c("Save and restart R to make your changes available", "Cancel"))
+  message("Restart your session when you're done for changes to take effect")
 
-  if(choice %in% c("Cancel", "")) {
-    rstudioapi::documentClose(context$id, save = FALSE)
-  } else {
-    rstudioapi::documentClose(context$id, save = TRUE)
-    current_key <- fetch_current_hotkey()
-    msg <- if(is.null(current_key)) {
-      paste(
-        sep = "\n",
-        "You're almost set! To define a RStudio hotkey go to :",
-        "Tools => Modify Keyboard Shortcuts..."
-      )
-    } else {
-      paste0("You're set! Press `", current_key, "` to trigger the addin\n")
-    }
-    rstudioapi::restartSession(message(msg))
-  }
+  # choice <- select.list(c("Save and restart R to make your changes available", "Cancel"))
+  #
+  # if(choice %in% c("Cancel", "")) {
+  #   rstudioapi::documentClose(context$id, save = FALSE)
+  # } else {
+  #   rstudioapi::documentClose(context$id, save = TRUE)
+  #   current_key <- fetch_current_hotkey()
+  #   msg <- if(is.null(current_key)) {
+  #     paste(
+  #       sep = "\n",
+  #       "You're almost set! To define a RStudio hotkey go to :",
+  #       "Tools => Modify Keyboard Shortcuts..."
+  #     )
+  #   } else {
+  #     paste0("You're set! Press `", current_key, "` to trigger the addin\n")
+  #   }
+  #   rstudioapi::restartSession(message(msg))
+  # }
 }
