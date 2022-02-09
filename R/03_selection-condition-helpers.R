@@ -135,7 +135,7 @@ selection_is_simple_call <- function() {
 
 #' @export
 #' @rdname selection-condition-helpers
-selection_contains_string <- function(
+selection_matches <- function(
   pattern, n_min = 1L, n_max= Inf, target = c("default", "lines", "script"), ...) {
   target <- match.arg(target)
   sum_ <- sum(regexpr(pattern, current_selection(), ...))
