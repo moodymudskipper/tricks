@@ -19,19 +19,24 @@ addin <- function() {
   }
   # reset all memoised functions
   forget_all()
-  # running so it can be memoised
-  env <- current_env()
+  # run so it can be memoised
   current_selection()
+  env <- new.env(parent = current_env())
+  # this is wrong, we need one env per trick, we should build a list of envs
+  # with replicate(new.env(parent = current_env()) and use mapply below
+  # we don't use global env because we might call the addin while debugging
+   #current_env()
 
-  opts <- getOption("poof.tricks")
-  if(is.null(opts)) {
+
+  tricks <- getOption("poof.tricks")
+  if(is.null(tricks)) {
     message("No actions were defined for this addin")
     return(invisible(NULL))
   }
 
   # test all conditions to filter eligible tricks
   eval_cond <- function(nm) {
-    x <- opts[[nm]]
+    x <- tricks[[nm]]
     lhs_call <- x[[2]]
     res <- try(eval(lhs_call, env), silent = TRUE)
     if(inherits(res, "try-error")) {
@@ -44,24 +49,24 @@ addin <- function() {
     res
   }
 
-  conds <- sapply(names(opts), eval_cond)
+  conds <- sapply(names(tricks), eval_cond)
   if(!any(conds)) {
     message("No tricks to show for this selection")
     return(invisible(NULL))
   }
 
   rstudioapi::sendToConsole("", FALSE)
-  names(opts)[conds] <- sapply(
-    names(opts[conds]),
+  names(tricks)[conds] <- sapply(
+    names(tricks[conds]),
     glue::glue, .envir =env)
 
-  opt_nm <- select.list(names(opts[conds]))
-  if(opt_nm == "") {
+  trick_label <- select.list(names(tricks[conds]))
+  if(trick_label == "") {
     rstudioapi::sendToConsole("")
     return(NULL)
   }
   # extract action call
-  rhs_call <- opts[[opt_nm]][[3]]
+  rhs_call <- tricks[[trick_label]][[3]]
   rhs_call <- do.call(bquote, list(rhs_call))
 
   eval(rhs_call, env)
