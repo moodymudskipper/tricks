@@ -7,6 +7,7 @@
 \alias{current_value}
 \alias{current_line_numbers}
 \alias{current_lines}
+\alias{current_indentation}
 \alias{current_path}
 \alias{document_code}
 \alias{current_code_block}
@@ -23,6 +24,8 @@ current_value(target = c("default", "lines", "script"))
 current_line_numbers(target = c("default", "lines", "script"))
 
 current_lines(target = c("default", "lines", "script"))
+
+current_indentation(target = c("default", "lines", "script"))
 
 current_path(full = TRUE)
 

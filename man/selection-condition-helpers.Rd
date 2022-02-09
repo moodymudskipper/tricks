@@ -13,7 +13,7 @@
 \alias{selection_is_reserved_word}
 \alias{selection_is_symbol}
 \alias{selection_is_call}
-\alias{selection_contains_string}
+\alias{selection_matches}
 \alias{selection_inherits}
 \alias{selection_is_function}
 \alias{selection_is_data_frame}
@@ -60,7 +60,7 @@ selection_is_call(
   target = c("default", "lines", "script")
 )
 
-selection_contains_string(
+selection_matches(
   pattern,
   n_min = 1L,
   n_max = Inf,
