@@ -21,7 +21,7 @@ current_selection <- function(target = c("default", "lines", "script")) {
 
 # this one will work only because called first in addin() and memoised!
 current_env <- function() {
-  parent.frame()
+  parent.frame(2)
 }
 
 # we probably need a single general function between current_call and current_expr
@@ -30,7 +30,7 @@ current_env <- function() {
 #' @rdname current_selection
 current_call <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
-  str2lang(current_selection())
+  str2lang(current_selection(target = target))
 }
 
 #' @export
