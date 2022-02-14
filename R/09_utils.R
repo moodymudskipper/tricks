@@ -28,7 +28,7 @@ fetch_current_hotkey <- function() {
   } else {
     path <- "~/.config/rstudio/keybindings/addins.json"
   }
-  jsonlite::fromJSON(path)[["poof::addin"]]
+  jsonlite::fromJSON(path)[["tricks::addin"]]
 }
 
 fake_selection <- function(new_selection) {

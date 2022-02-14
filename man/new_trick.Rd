@@ -10,16 +10,16 @@ new_trick(label, condition, action)
 \item{label}{A string}
 
 \item{condition}{A one sided formula, using condition helpers and context informers, whose
-right hand side expressions returns a boolean when evaluated by {poof}}
+right hand side expressions returns a boolean when evaluated by {tricks}}
 
 \item{action}{A one sided formula, using action helpers and context informers, whose
-right hand side triggers the desired actions when evaluated by {poof}}
+right hand side triggers the desired actions when evaluated by {tricks}}
 }
 \value{
-a "poof_trick" object
+a "tricks_trick" object
 }
 \description{
-Create a trick to be used as an argument in \code{poof::add_tricks()}, mainly useful
+Create a trick to be used as an argument in \code{tricks::add_tricks()}, mainly useful
 to store tricks in packages
 }
 \examples{

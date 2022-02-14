@@ -13,16 +13,16 @@ add_tricks <- function(..., .reset = FALSE) {
   pf <- parent.frame()
   new_tricks <- lapply(new_tricks_lazy, eval, pf)
   check_tricks(new_tricks)
-  # flatten "poof_trick" objects
+  # flatten "tricks_trick" objects
   new_tricks <- unlist(new_tricks)
-  tricks <- getOption("poof.tricks")
+  tricks <- getOption("tricks.tricks")
   tricks[names(new_tricks)] <- new_tricks
-  options(poof.tricks = tricks)
+  options(tricks.tricks = tricks)
 }
 
 check_tricks <- function(tricks) {
   validate_trick <- function(x, nm) {
-    inherits(x, "poof_trick") || (
+    inherits(x, "tricks_trick") || (
       nm != "" && inherits(x, "formula") && length(x) == 3
     )
   }
@@ -41,18 +41,18 @@ check_tricks <- function(tricks) {
 rm_tricks <- function(...) {
   nms <- c(...)
   if(!length(nms)) {
-    options(poof.tricks = list())
+    options(tricks.tricks = list())
   } else {
-    tricks <- getOption("poof.tricks")
+    tricks <- getOption("tricks.tricks")
     tricks[nms] <- NULL
-    options(poof.tricks = tricks)
+    options(tricks.tricks = tricks)
   }
 }
 
 #' @rdname add_tricks
 #' @export
 show_tricks <- function() {
-  getOption("poof.tricks")
+  getOption("tricks.tricks")
 }
 
 #' @rdname add_tricks
@@ -64,26 +64,26 @@ edit_tricks <- function() {
     if(tolower(basename(context$path)) == ".rprofile") break
   }
   file_code <- context$contents
-  matches <-  regexpr("poof::add_tricks\\(", file_code)
+  matches <-  regexpr("tricks::add_tricks\\(", file_code)
   row <- which(matches != -1)
   if(length(row)) {
     col <- matches[row] + attr(matches, "match.length")[row]
     send_cursor_at_position(row, col)
   } else {
-    txt <- readLines(system.file("default_tricks/default_tricks.R", package = "poof"))
+    txt <- readLines(system.file("default_tricks/default_tricks.R", package = "tricks"))
     txt <- paste0(c("", txt), collapse = "\n")
     insert_at_position(txt)
-    message("A default `poof::add_tricks()` call has been pasted in you '.RProfile'.",
+    message("A default `tricks::add_tricks()` call has been pasted in you '.RProfile'.",
             "\nYou might modify it or leaving it as is for now!")
   }
 
   # make all functions available for the time of the call
-  # if(!"package:poof" %in% search()) {
-  #   message("attaching {poof} package")
-  #   library(poof)
-  #   on.exit(detach("package:poof"))
+  # if(!"package:tricks" %in% search()) {
+  #   message("attaching {tricks} package")
+  #   library(tricks)
+  #   on.exit(detach("package:tricks"))
   # }
-  rstudioapi::sendToConsole("library(poof)")
+  rstudioapi::sendToConsole("library(tricks)")
 
   message("Restart your session when you're done for changes to take effect")
 

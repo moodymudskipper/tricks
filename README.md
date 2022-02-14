@@ -1,41 +1,45 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# poof
+# tricks
 
-RStudio addins are great but have flaws :
+RStudio addins are handy but have flaws :
 
 -   They’re contained in packages, which are not straightforward to
     write/iterate on
 -   It’s hard to remember which addins you’ve installed, and harder to
     remember the hotkeys you’ve set for them
--   The addin list soon becomes overwhelming
+-   The addin list soon becomes overwhelming since they’re all shown at
+    all times, even when they don’t apply
 
-So you don’t write them much, and you don’t use them much.
+So in the end you might not write them much, and not use them much.
 
-{poof} is an attempt to solve those issues:
+{tricks} is an attempt to solve those issues:
 
 -   It works with a single hotkey
 -   Depending on your selection (or current line or document), only
     relevant action choices are proposed
 -   It’s made very easy to add actions
 
-We don’t recommend attaching the package, a call to `poof::add_tricks()`
-in your R profile is all you should need.
+We don’t recommend attaching the package, a call to
+`tricks::add_tricks()` in your R profile is all you should need.
 
 ## Installation
 
 ``` r
-remotes::install_github("moodymudskipper/poof")
+remotes::install_github("moodymudskipper/tricks")
 ```
 
 ## general
 
-We call “tricks” the features implemented by {poof}, and use the
+We call “tricks” the features implemented by {tricks}, and use the
 following syntax to define them :
 
 ``` r
-poof::add_tricks("<label1>" = <condition1> ~ <action1>, "<label2>" = <condition2> ~ <action2>, ...)
+tricks::add_tricks(
+  "<label1>" = <condition1> ~ <action1>, 
+  "<label2>" = <condition2> ~ <action2>, 
+  ...)
 ```
 
 -   When the **hotkey** is triggered , all **conditions** are evaluated
@@ -54,12 +58,12 @@ Do you know how to easily edit your user or project R Profile ? There’s
 a nice {usethis} function for this, but maybe you have problems
 remembering it, or you’d rather not have to type it.
 
-We propose below tricks to do that. If you trigger {poof} when not
+We propose below tricks to do that. If you trigger {tricks} when not
 selecting anything in the editor it will propose you to edit either your
 user or project R profile.
 
 ``` r
-poof::add_tricks(
+tricks::add_tricks(
   "Edit user '.Rprofile'" =
     selection_is_empty() ~     # condition : no selection
     usethis::edit_r_profile(), # action    : call packaged function
@@ -98,7 +102,7 @@ whenever we select parsable code that isn’t a symbol, when it is
 triggered it should call the relevant {reprex} addin.
 
 ``` r
-poof::add_tricks(
+tricks::add_tricks(
   "Reprex selection" =
     selection_is_parsable(symbol_ok = FALSE) ~  # condition : selection is code
     call_addin("reprex", "Reprex selection"),   # action    : call existing addin
@@ -117,7 +121,7 @@ documented in \`?\`\`action-helpers\`\`\`.
 It is good practice to have narrow conditions around our use cases so as
 our list of tricks grows we only display those that apply. We could have
 defined
-`poof::add_tricks("Reprex selection" = TRUE ~ call_addin("reprex", "Reprex selection"))`
+`tricks::add_tricks("Reprex selection" = TRUE ~ call_addin("reprex", "Reprex selection"))`
 but then Reprex Selection would always be proposed even when it doesn’t
 apply.
 
@@ -131,7 +135,7 @@ We can set a trick to `debugonce()` a function, it should be proposed
 only if the selection is a symbol bound to a function.
 
 ``` r
-poof::add_tricks(
+tricks::add_tricks(
   # label : here using glue syntax to have dynamic action names
   "debugonce({current_selection()})" = 
     # condition : selection evaluates to function
@@ -158,10 +162,10 @@ permit us to program with such functions conveniently.
 
 ## Where are these tricks stored ? Can I remove some ?
 
-They’re stored in the `"poof.tricks"` option which you can display with
-`getOption("poof.tricks")` or `poof::show_tricks()`. You can remove
-tricks by calling `poof::rm_tricks()` with the labels of the tricks to
-remove.
+They’re stored in the `"tricks.tricks"` option which you can display
+with `getOption("tricks.tricks")` or `tricks::show_tricks()`. You can
+remove tricks by calling `tricks::rm_tricks()` with the labels of the
+tricks to remove.
 
 ## Isn’t it slow to have a lot of tricks ? Is it safe ?
 
@@ -175,16 +179,16 @@ evaluate.
 We discourage evaluating the selection (unless it’s a symbol) by
 forbidding the use of `current_value()` in conditions. Evaluating a
 complex expression might take time and/or have side effects and this
-would really spoil the fun of {poof}. Unless you try really hard,
-conditions won’t affect the global state so {poof} can be used safely.
+would really spoil the fun of {tricks}. Unless you try really hard,
+conditions won’t affect the global state so {tricks} can be used safely.
 
 Moreover condition cannot trigger an error, if its code fails it just
 returns `FALSE`, the evaluation of conditions is also totally silent.
 
 ## Use packages of tricks or design your own
 
-`poof::add_tricks()` can take named formulas as arguments as we’ve seen
-above. It can also take `"trick"` objects.
+`tricks::add_tricks()` can take named formulas as arguments as we’ve
+seen above. It can also take `"trick"` objects.
 
 `"trick"` objects are created using the `new_trick()` function and they
 can be fed as unnamed arguments.
@@ -198,7 +202,7 @@ might create a package {mytricks} and have :
 #' A trick that proposes edit the user R profile
 #'@export
 #'@name edit_user_rprofile
-edit_user_rprofile <- poof::new_trick(
+edit_user_rprofile <- tricks::new_trick(
   "Edit user '.Rprofile'",
   ~ selection_is_empty(),
   ~ usethis::edit_r_profile()
@@ -208,7 +212,7 @@ edit_user_rprofile <- poof::new_trick(
 And then tricks can be added this way
 
 ``` r
-poof::add_trick(
+tricks::add_trick(
   my.trick.pkg::edit_user_rprofile,
 )
 ```

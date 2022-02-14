@@ -1,4 +1,4 @@
-poof::add_tricks(
+tricks::add_tricks(
   .reset = TRUE,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # No selection - general
