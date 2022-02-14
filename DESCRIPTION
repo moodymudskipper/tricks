@@ -1,24 +1,23 @@
-Package: poof
-Title: An Addin to Easily Program and Trigger Actions 
+Package: tricks
+Title: A Single Addin for Context Dependent Actions
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Antoine",
            family = "Fabri",
            role = c("aut", "cre"),
            email = "antoine.fabri@gmail.com")
-Description: An Addin to Easily Program and Trigger Actions.
+Description: A Single Addin for Context Dependent Actions
 License: GPL-3
 Encoding: UTF-8
 Language: en
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-URL: https://github.com/moodymudskipper/poof
-BugReports: https://github.com/moodymudskipper/poof/issues
+URL: https://github.com/moodymudskipper/tricks
+BugReports: https://github.com/moodymudskipper/tricks/issues
 Imports: 
     glue,
     jsonlite,
     memoise,
     rstudioapi,
-    typed,
     usethis

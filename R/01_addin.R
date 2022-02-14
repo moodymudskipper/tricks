@@ -13,9 +13,9 @@ addin <- function() {
     on.exit(sink(file, type = "output", split = FALSE))
   }
   # make all functions available for the time of the call
-  if(!"package:poof" %in% search()) {
-    library(poof)
-    on.exit(detach("package:poof"), add = TRUE)
+  if(!"package:tricks" %in% search()) {
+    library(tricks)
+    on.exit(detach("package:tricks"), add = TRUE)
   }
   # reset all memoised functions
   forget_all()
@@ -28,7 +28,7 @@ addin <- function() {
    #current_env()
 
 
-  tricks <- getOption("poof.tricks")
+  tricks <- getOption("tricks.tricks")
   if(is.null(tricks)) {
     message("No actions were defined for this addin")
     return(invisible(NULL))
