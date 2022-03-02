@@ -21,12 +21,6 @@ addin <- function() {
   forget_all()
   # run so it can be memoised
   current_selection()
-  env <- new.env(parent = current_env())
-  # this is wrong, we need one env per trick, we should build a list of envs
-  # with replicate(new.env(parent = current_env()) and use mapply below
-  # we don't use global env because we might call the addin while debugging
-   #current_env()
-
 
   tricks <- getOption("tricks.tricks")
   if(is.null(tricks)) {
@@ -34,8 +28,11 @@ addin <- function() {
     return(invisible(NULL))
   }
 
+  envs <- replicate(length(tricks), new.env(parent = current_env()))
+  names(envs) <- names(tricks)
+
   # test all conditions to filter eligible tricks
-  eval_cond <- function(nm) {
+  eval_cond <- function(nm, env) {
     x <- tricks[[nm]]
     lhs_call <- x[[2]]
     res <- try(eval(lhs_call, env), silent = TRUE)
@@ -49,16 +46,16 @@ addin <- function() {
     res
   }
 
-  conds <- sapply(names(tricks), eval_cond)
+  conds <- mapply(eval_cond, names(tricks), envs)
   if(!any(conds)) {
     message("No tricks to show for this selection")
     return(invisible(NULL))
   }
 
   rstudioapi::sendToConsole("", FALSE)
-  names(tricks)[conds] <- sapply(
-    names(tricks[conds]),
-    glue::glue, .envir =env)
+  names(tricks)[conds] <-
+    mapply(glue::glue, names(tricks[conds]), .envir =envs[conds])
+  names(envs)[conds] <- names(tricks)[conds]
 
   trick_label <- select.list(names(tricks[conds]))
   if(trick_label == "") {
@@ -69,6 +66,8 @@ addin <- function() {
   rhs_call <- tricks[[trick_label]][[3]]
   rhs_call <- do.call(bquote, list(rhs_call))
 
-  eval(rhs_call, env)
+  eval(rhs_call, envs[[trick_label]])
   rstudioapi::sendToConsole("")
 }
+
+
