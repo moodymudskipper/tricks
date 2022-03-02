@@ -1,5 +1,0 @@
-Message:
-  description: message
-  condition: TRUE
-  action: message("hello")
-
