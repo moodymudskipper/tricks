@@ -1,6 +1,8 @@
 #' Clipboard Focused Condition Helpers
 #' @export
 #' @rdname clipboard-condition-helpers
+#' @inheritParams current_selection
+#' @inheritParams selection-condition-helpers
 clipboard_contains_text <- function() {
   w <- options(warn = 2)
   on.exit(options(warn = w$warn))
@@ -10,7 +12,7 @@ clipboard_contains_text <- function() {
 #' @export
 #' @rdname clipboard-condition-helpers
 clipboard_is_parsable <- function() {
-  clipboard_contains_text() && !fails(parse(text=clipboard_text()))
+  clipboard_contains_text() && !fails(parse(text = clipboard_text()))
 }
 
 #' @export

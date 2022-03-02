@@ -3,7 +3,6 @@
 #' These helpers are meant to be used on the left hand side of the trick specification,
 #' to filter which tricks the addin should display.
 #'
-#' @param txt A character object
 #' @param n number of lines
 #' @param multi_ok Are multiple calls eligible ?
 #' @param single_ok Are single calls eligible ?
@@ -14,6 +13,13 @@
 #'   `[[` or `$` are considered. It should be used on condition calls to make sure
 #'   we never evaluate a call that would have side effects.
 #' @param class class used to check inheritance
+#' @param pattern regular expression
+#' @param n_min minimal number of occurences to validate match
+#' @param n_max maximal number of occurences to validate match
+#' @param empty_ok whether an empty section qualifies
+#' @param type atomic type
+#' @param ... additional arguments passed to `regexpr()`
+#' @inheritParams current_selection
 #' @inheritParams current_selection
 #' @export
 #' @name selection-condition-helpers
