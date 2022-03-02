@@ -1,10 +1,10 @@
 Edit user '.Rprofile':
-  description: Edit user '.Rprofile'
+  description: Opens user '.Rprofile'
   condition: selection_is_empty()
   action: usethis::edit_r_profile()
 
 Edit project '.Rprofile':
-  description: Edit project '.Rprofile'
+  description: Opens project '.Rprofile'
   condition: selection_is_empty()
   action: usethis::edit_r_profile(scope = "project")
 
@@ -54,7 +54,7 @@ Install '{current_selection()}' package  from github:
     }
 
 Reprex selection:
-  description: Reprex selection
+  description: Create a Reprex fron selection
   condition: selection_is_parsable(symbol_ok = FALSE)
   action: call_addin("reprex", "Reprex selection")
 
@@ -68,7 +68,7 @@ Style selection wih 'styler':
     }
 
 debugonce({current_selection()}):
-  description: debugonce({current_selection()})
+  description: Call debugonce() on selected function
   condition: selection_is_function()
   action: debugonce(.(current_call()))
 

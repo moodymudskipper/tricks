@@ -14,15 +14,15 @@ RStudio addins are handy but have flaws :
 
 So in the end you might not write them much, and not use them much.
 
-{tricks} is an attempt to solve those issues:
+{tricks} is an attempt to solve those issues : \* it works with a single
+hotkey \* It proposes only relevant actions, by observing the context
+(selection, clipboard…) \* It’s made very easy to add actions
 
--   It works with a single hotkey
--   Depending on your selection (or current line or document), only
-    relevant action choices are proposed
--   It’s made very easy to add actions
+A trick is defined by a condition, a label and an action, then:
 
-We don’t recommend attaching the package, a call to
-`tricks::add_tricks()` in your R profile is all you should need.
+-   When the **hotkey** is triggered , all **conditions** are evaluated
+-   For satisfied **conditions**, **labels** are proposed to the user
+-   Once the **label** is selected, the **action** is triggered
 
 ## Installation
 
@@ -30,49 +30,47 @@ We don’t recommend attaching the package, a call to
 remotes::install_github("moodymudskipper/tricks")
 ```
 
-## general
+## Install and use tricks
 
-We call “tricks” the features implemented by {tricks}, and use the
-following syntax to define them :
+Tricks are stored in YAML files, your own tricks are stored in a
+`.r-tricks.yaml` files located next to your `.Rprofile` files, this way
+you can define them at the project or at the user level.
 
-``` r
-tricks::add_tricks(
-  "<label1>" = <condition1> ~ <action1>, 
-  "<label2>" = <condition2> ~ <action2>, 
-  ...)
-```
+These can be installed from packages or other YAML files using
+`install_tricks()`.
 
--   When the **hotkey** is triggered , all **conditions** are evaluated
--   When the **condition** is satisfied, the **label** of the trick is
-    is shown
--   When the **label** is selected, the **action** is triggered
+-   `install_tricks()`, without arguments, proposes you some tricks that
+    come with the {tricks} package.
+-   `install_tricks("some_tricks.yaml")`, proposes you to install tricks
+    defined in a specific file
+-   `install_tricks("pkg")` proposes you to install tricks from a
+    package, the developer of such package should include a
+    `tricks.yaml` file in the `inst` subfolder of their package.
 
-The package contains a suit of functions to help you define actions and
-conditions conveniently.
+*Insert gif describing `install_tricks()`, install a couple and apply
+them to a situation where they are not triggered at the same time*
 
-Let’s go through a few examples.
+## Define tricks using YAML files
 
-## Editing your R Profile
+Designing your own tricks can be very fast, we’ll illustrate this with 3
+tricks shipped with this package. To see all tricks defined in this
+package you can call
+`file.edit(system.file("tricks.yaml", package = "tricks"))`
 
-Do you know how to easily edit your user or project R Profile ? There’s
-a nice {usethis} function for this, but maybe you have problems
-remembering it, or you’d rather not have to type it.
+### Edit zour `.Rprofile`
 
-We propose below tricks to do that. If you trigger {tricks} when not
-selecting anything in the editor it will propose you to edit either your
-user or project R profile.
+Do you know how to easily edit your user R Profile ? There’s a nice
+{usethis} function for this, but maybe you have problems remembering it,
+or you’d rather not have to type it.
 
-``` r
-tricks::add_tricks(
-  "Edit user '.Rprofile'" =
-    selection_is_empty() ~     # condition : no selection
-    usethis::edit_r_profile(), # action    : call packaged function
+We propose a trick to do that. If you trigger {tricks} when not
+selecting anything in the editor it will propose you to open your user R
+profile.
 
-  "Edit project '.Rprofile'" =
-    selection_is_empty() ~                      # condition : no selection
-    usethis::edit_r_profile(scope = "project"), # action    : call packaged function
-)
-```
+    Edit user '.Rprofile':
+      description: Opens user '.Rprofile'
+      condition: selection_is_empty()
+      action: usethis::edit_r_profile()
 
 We see below that whenever the selection is not empty the labels are not
 shown, but they are shown if the selection is empty.
@@ -92,7 +90,7 @@ many of them, documented in :
 -   \`?\`\`clipboard-condition-helpers\`\`\`
 -   \`?\`\`system-condition-helpers\`\`\`
 
-## Reprex your selection
+### Reprex your selection
 
 The {reprex} package comes with a handy addin to create a reprex from a
 hotkey. You’ll have to remember how to trigger the hotkey though.
@@ -101,13 +99,10 @@ If you don’t want to we can set up a trick that will be proposed
 whenever we select parsable code that isn’t a symbol, when it is
 triggered it should call the relevant {reprex} addin.
 
-``` r
-tricks::add_tricks(
-  "Reprex selection" =
-    selection_is_parsable(symbol_ok = FALSE) ~  # condition : selection is code
-    call_addin("reprex", "Reprex selection"),   # action    : call existing addin
-)
-```
+    Reprex selection:
+      description: Create a Reprex fron selection
+      condition: selection_is_parsable(symbol_ok = FALSE)
+      action: call_addin("reprex", "Reprex selection")
 
 We see below that whenever the selected code is parsable and is more
 than just a symbol, the action will be proposed.
@@ -125,7 +120,7 @@ defined
 but then Reprex Selection would always be proposed even when it doesn’t
 apply.
 
-## `debugonce()`
+### `debugonce()`
 
 You might not like to type the name of a function when you want to
 debug, we might could define an addin to call `debugonce()` on your
@@ -135,20 +130,16 @@ We can set a trick to `debugonce()` a function, it should be proposed
 only if the selection is a symbol bound to a function.
 
 ``` r
-tricks::add_tricks(
-  # label : here using glue syntax to have dynamic action names
-  "debugonce({current_selection()})" = 
-    # condition : selection evaluates to function
-    selection_is_function() ~ 
-    # action    : run debugonce, we use `bquote()`'s `.()` notation to work around NSE issues
-    debugonce(.(current_call())),      
-)
+debugonce({current_selection()}):
+  description: Call debugonce() on selected function
+  condition: selection_is_function()
+  action: debugonce(.(current_call()))
 ```
 
 We see below that the action is proposed only if a symbol is selected
 and evaluates to a function.
 
-**INSERT GIF**
+*INSERT GIF*
 
 `selection_is_function()` is another **condition helper**.
 `current_selection()` and `current_call()` are **context informers**,
@@ -159,6 +150,55 @@ label, this is handy to provide custom labels \* We used `.()` inside
 `debugonce()`, this is the same `.()` that we find in `bquote()`,
 `debugonce()` uses NSE and supporting `.()` in actions and conditions
 permit us to program with such functions conveniently.
+
+    tricks::add_tricks(
+      "<label1>" = <condition1> ~ <action1>, 
+      "<label2>" = <condition2> ~ <action2>, 
+      ...)
+
+The package contains a suit of functions to help you define actions and
+conditions conveniently.
+
+Let’s go through a few examples.
+
+## Define tricks with `add_tricks()`
+
+While we recommend using YAML files to display store tricks, it might be
+useful to define tricks directly in R code for easier trial and error
+and benefiting from autocomplete. This can be achieved using
+`add_tricks()`, its syntax is :
+
+``` r
+tricks::add_tricks(
+  "<label1>" = <condition1> ~ <action1>, 
+  "<label2>" = <condition2> ~ <action2>, 
+  ...)
+```
+
+To reproduce the tricks showcased above we would run :
+
+``` r
+tricks::add_tricks(
+  "Edit user '.Rprofile'" =
+    selection_is_empty() ~     
+    usethis::edit_r_profile(), 
+
+  "Edit project '.Rprofile'" =
+    selection_is_empty() ~                      
+    usethis::edit_r_profile(scope = "project"), 
+  
+  "Reprex selection" =
+    selection_is_parsable(symbol_ok = FALSE) ~  
+    call_addin("reprex", "Reprex selection"),
+  
+  # label : here using glue syntax to have dynamic action names
+  "debugonce({current_selection()})" = 
+    # condition : selection evaluates to function
+    selection_is_function() ~ 
+    # action    : run debugonce, we use `bquote()`'s `.()` notation to work around NSE issues
+    debugonce(.(current_call())),      
+)
+```
 
 ## Where are these tricks stored ? Can I remove some ?
 
@@ -184,35 +224,3 @@ conditions won’t affect the global state so {tricks} can be used safely.
 
 Moreover condition cannot trigger an error, if its code fails it just
 returns `FALSE`, the evaluation of conditions is also totally silent.
-
-## Use packages of tricks or design your own
-
-`tricks::add_tricks()` can take named formulas as arguments as we’ve
-seen above. It can also take `"trick"` objects.
-
-`"trick"` objects are created using the `new_trick()` function and they
-can be fed as unnamed arguments.
-
-If we want to package the first trick we defined in this document we
-might create a package {mytricks} and have :
-
-``` r
-#' Edit user R Profile
-#' 
-#' A trick that proposes edit the user R profile
-#'@export
-#'@name edit_user_rprofile
-edit_user_rprofile <- tricks::new_trick(
-  "Edit user '.Rprofile'",
-  ~ selection_is_empty(),
-  ~ usethis::edit_r_profile()
-)
-```
-
-And then tricks can be added this way
-
-``` r
-tricks::add_trick(
-  my.trick.pkg::edit_user_rprofile,
-)
-```
