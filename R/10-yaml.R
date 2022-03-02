@@ -18,15 +18,16 @@
 #' new_trick_library_path <- tempfile(fileext = ".yaml")
 #' trick_list_to_yaml(trick_subset, new_trick_library_path)
 yaml_to_trick_list <- function(file) {
-  yaml_tricks <- yaml::read_yaml(file)
+  yaml_tricks <- yaml::read_yaml(file, eval.expr = FALSE)
   #FIXME: validate list
   yaml_to_trick <- function(x, nm) {
-    condition <- call("~", str2lang(x$condition))
-    action <- call("~", str2lang(x$action))
-    new_trick(nm, condition, action)
+    x$label <- nm
+    if(is.null(x$description)) x$description <- nm
+    x$condition <- call("~", str2lang(as.character(x$condition)))
+    x$action <- call("~", str2lang(x$action))
+    do.call(new_trick, x)
   }
   tricks <- Map(yaml_to_trick, yaml_tricks, names(yaml_tricks))
-  names(tricks) <- names(yaml_tricks)
   tricks
 }
 
@@ -34,29 +35,30 @@ yaml_to_trick_list <- function(file) {
 #' @export
 trick_list_to_yaml <- function(tricks, file, append = TRUE) {
   # yaml::as_yaml puts no extra space and doesnt display all code correctly
-  trick_to_yaml_string <- function(trick) {
-    condition <- deparse(trick[[c(1, 2)]], width.cutoff = 100)
-    if (length(condition) > 1) {
-      condition <- paste(c("|", condition), collapse = "\n    ")
-    }
-    action <- deparse(trick[[c(1, 3)]], width.cutoff = 100)
-    if (length(action) > 1) {
-      action <- paste(c("|", action), collapse = "\n    ")
-    }
-    paste(
-      sep = "\n",
-      paste0(names(trick), ":"),
-      paste0("  description: ", names(trick)),
-      paste0("  condition: ", condition),
-      paste0("  action: ", action)
-    )
-  }
   yaml_tricks <- paste(sapply(tricks, trick_to_yaml_string), collapse = "\n\n")
   if (append && file.exists(file)) yaml_tricks <- paste0(
     paste(readLines(file), collapse = "\n"), "\n\n", yaml_tricks)
   writeLines(yaml_tricks, file)
 }
 
+trick_to_yaml_string <- function(trick) {
+  condition_chr <- deparse(trick$condition, width.cutoff = 100)
+  if (length(condition_chr) > 1) {
+    trick$condition <- paste(c("|", condition_chr), collapse = "\n    ")
+  }
+  action_chr <- deparse(trick$action, width.cutoff = 100)
+  if (length(action_chr) > 1) {
+    trick$action <- paste(c("|", action_chr), collapse = "\n    ")
+  }
+  label <- trick$label
+  label_line <- paste0(trick$label, ":")
+  trick[["label"]] <- NULL
+  trick_lines <- paste0("  ", names(trick), ": ", trick)
+  paste(c(label_line, trick_lines), collapse = "\n")
+}
+
+
+global_tricks <- new.env()
 
 #' Load tricks from YAML file
 #'
@@ -88,7 +90,9 @@ load_yaml_tricks <- function(file = NULL, labels = NULL, reset = FALSE) {
     #FIXME validate labels
     tricks <- tricks[labels]
   }
-  do.call(add_tricks, c(tricks, .reset = reset))
+
+  list2env(tricks, global_tricks)
+
   invisible(file)
 }
 
@@ -165,17 +169,14 @@ use_yaml_tricks <- function(project_level = FALSE) {
 #' @return Returns the first argument invisibly, called for side effects.
 #' @export
 install_tricks <- function(source = "tricks", project_level = FALSE, all = FALSE) {
+
+  # build paths ----------------------------------------------------------------
+
   if(project_level) {
     file_to <- ".r-tricks.yaml"
   } else {
     file_to <- "~/.r-tricks.yaml"
   }
-  if (file.exists(file_to)) {
-    old_tricks <- yaml_to_trick_list(file_to)
-  } else {
-    old_tricks <- NULL
-  }
-  old_labels <- names(old_tricks)
 
   source_is_yaml <- grepl("\\.yaml$", source)
   if(source_is_yaml) {
@@ -183,6 +184,16 @@ install_tricks <- function(source = "tricks", project_level = FALSE, all = FALSE
   } else {
     file_from <- system.file("tricks.yaml", package = source)
   }
+
+  # build trick lists ----------------------------------------------------------
+
+  if (file.exists(file_to)) {
+    old_tricks <- yaml_to_trick_list(file_to)
+  } else {
+    old_tricks <- NULL
+  }
+  old_labels <- names(old_tricks)
+
   tricks <- yaml_to_trick_list(file_from)
   tricks <- tricks[!names(tricks) %in% old_labels]
   if (all) {
@@ -194,6 +205,8 @@ install_tricks <- function(source = "tricks", project_level = FALSE, all = FALSE
       title = "select tricks to add to your '.r-tricks.yaml' file")
     new_tricks <- tricks[nums]
   }
+
+  # Install and inform ---------------------------------------------------------
 
   new_labels <- names(new_tricks)
 

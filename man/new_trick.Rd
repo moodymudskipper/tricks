@@ -4,23 +4,26 @@
 \alias{new_trick}
 \title{Create a new trick}
 \usage{
-new_trick(label, condition, action)
+new_trick(label, condition, action, description = label, ...)
 }
 \arguments{
 \item{label}{A string}
 
-\item{condition}{A one sided formula, using condition helpers and context informers, whose
+\item{condition}{A call or a one sided formula, using condition helpers and context informers, whose
 right hand side expressions returns a boolean when evaluated by {tricks}}
 
-\item{action}{A one sided formula, using action helpers and context informers, whose
+\item{action}{A call or a one sided formula, using action helpers and context informers, whose
 right hand side triggers the desired actions when evaluated by {tricks}}
+
+\item{description}{The description of the trick, for documentation purposes}
+
+\item{...}{other properties to print with the object and in YAML files}
 }
 \value{
-a "tricks_trick" object
+A list of class "trick_object"
 }
 \description{
-Create a trick to be used as an argument in \code{tricks::add_tricks()}, mainly useful
-to store tricks in packages
+Create a trick object
 }
 \examples{
 new_trick(

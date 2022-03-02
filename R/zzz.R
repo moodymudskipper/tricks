@@ -22,3 +22,7 @@ local({
 })
 
 globalVariables(c(".rs.rpc.transform_snippet"))
+
+.onLoad <- function(...) {
+  load_yaml_tricks()
+}

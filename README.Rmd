@@ -44,15 +44,15 @@ remotes::install_github("moodymudskipper/tricks")
 
 ## Install and use tricks
 
-Tricks are stored in YAML files, your own tricks are stored
+Tricks are stored in YAML files, installed tricks are stored
 in a `.r-tricks.yaml` files located next to your `.Rprofile` files, this way you
 can define them at the project or at the user level.
 
 These can be installed from packages or other YAML files using `install_tricks()`.
 
-* `install_tricks()`, without arguments, proposes you some tricks that come with
+* `install_tricks()` without arguments installs tricks that come with
 the {tricks} package.
-* `install_tricks("some_tricks.yaml")`, proposes you to install tricks defined in a specific file
+* `install_tricks("some_tricks.yaml")` installs tricks defined in a specific file
 * `install_tricks("pkg")` proposes you to install tricks from a package, the developer of such package
   should include a `tricks.yaml` file in the `inst` subfolder of their package.
 
@@ -123,7 +123,6 @@ the action will be proposed.
 
 It is good practice to have narrow conditions around our use cases 
 so as our list of tricks grows we only display those that apply.
-We could have defined `tricks::add_tricks("Reprex selection" = TRUE ~ call_addin("reprex", "Reprex selection"))` but then Reprex Selection would always be proposed even when it doesn't apply.
 
 
 ### `debugonce()`
@@ -157,24 +156,20 @@ We note a couple new things here :
 `bquote()`, `debugonce()` uses NSE and supporting `.()` in actions and conditions
   permit us to program with such functions conveniently.
 
-
-
 ```
-tricks::add_tricks(
+load_tricks(
   "<label1>" = <condition1> ~ <action1>, 
   "<label2>" = <condition2> ~ <action2>, 
   ...)
 ```
 
-
-
-The package contains a suit of functions to help you define actions and conditions conveniently.
+The package contains a set of functions to help you define actions and conditions conveniently.
 
 Let's go through a few examples.
 
-## Define tricks with `add_tricks()`
+## Define tricks with `load_tricks()`
 
-While we recommend using YAML files to display store tricks, it might be useful
+While we recommend using YAML files to store tricks, it might be useful
 to define tricks directly in R code for easier trial and error and benefiting from 
 autocomplete. This can be achieved using `add_tricks()`, its syntax is :
 
@@ -210,11 +205,14 @@ tricks::add_tricks(
 )
 ```
 
-## Where are these tricks stored ? Can I remove some ?
+## Explore and edit tricks
 
-They're stored in the `"tricks.tricks"` option which you can display with `getOption("tricks.tricks")`
-or `tricks::show_tricks()`. You can remove tricks by calling `tricks::rm_tricks()` with
-the labels of the tricks to remove.
+* `edit_tricks()` to open YAML file
+* `install_tricks()` to add new entries to YAML files
+* `uninstall_tricks()` to remove some
+* `loaded_tricks()` or `View(loaded_tricks())` to explore loaded tricks
+* `load_tricks()` to load trick objects or load tricks built from formulas
+* `unload_tricks()` to unload some 
 
 ## Isn't it slow to have a lot of tricks ? Is it safe ?
 

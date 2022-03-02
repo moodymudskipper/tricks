@@ -19,54 +19,54 @@ addin <- function() {
   }
   # reset all memoised functions
   forget_all()
-  # run so it can be memoised
-  current_selection()
 
-  tricks <- getOption("tricks.tricks")
-  if(is.null(tricks)) {
-    message("No actions were defined for this addin")
+  # cache selection and environment
+  current_selection()
+  current_env()
+
+  tricks <- as.list(global_tricks)
+  if(!length(tricks)) {
+    message("No tricks to display")
     return(invisible(NULL))
   }
 
-  envs <- replicate(length(tricks), new.env(parent = current_env()))
-  names(envs) <- names(tricks)
-
-  # test all conditions to filter eligible tricks
-  eval_cond <- function(nm, env) {
-    x <- tricks[[nm]]
-    lhs_call <- x[[2]]
-    res <- try(eval(lhs_call, env), silent = TRUE)
-    if(inherits(res, "try-error")) {
+  # compute condition and label
+  tricks_processed <- lapply(tricks, function(x) {
+    # provide an env to every trick
+    x$.env <- new.env(parent = current_env())
+    # eval cond
+    x$condition <- try(eval(x$condition, x$.env), silent = TRUE)
+    if(inherits(x$condition, "try-error")) {
       warning(
-        "The condition couldn't be evaluated for the trick \"", nm, "\"",
+        "The condition couldn't be evaluated for the trick \"", x$label, "\"",
         immediate. = TRUE,
         call. = FALSE)
-      return(FALSE)
+      x$condition <- FALSE
+    } else {
+      x$label <- glue::glue(x$label, .envir = x$.env)
     }
-    res
-  }
+    x
+  })
 
-  conds <- mapply(eval_cond, names(tricks), envs)
-  if(!any(conds)) {
-    message("No tricks to show for this selection")
+  tricks_applicable <- Filter(function(x) x$condition, tricks_processed)
+
+  if(!length(tricks_applicable)) {
+    message("No tricks to display")
     return(invisible(NULL))
   }
 
   rstudioapi::sendToConsole("", FALSE)
-  names(tricks)[conds] <-
-    mapply(glue::glue, names(tricks[conds]), .envir =envs[conds])
-  names(envs)[conds] <- names(tricks)[conds]
 
-  trick_label <- select.list(names(tricks[conds]))
+  trick_label <- select.list(names(tricks_applicable))
   if(trick_label == "") {
     rstudioapi::sendToConsole("")
     return(NULL)
   }
   # extract action call
-  rhs_call <- tricks[[trick_label]][[3]]
-  rhs_call <- do.call(bquote, list(rhs_call))
+  trick <- tricks_applicable[[trick_label]]
+  action <- do.call(bquote, list(trick$action))
 
-  eval(rhs_call, envs[[trick_label]])
+  eval(action, trick$.env)
   rstudioapi::sendToConsole("")
 }
 
