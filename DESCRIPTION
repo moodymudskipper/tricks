@@ -6,7 +6,7 @@ Authors@R:
            family = "Fabri",
            role = c("aut", "cre"),
            email = "antoine.fabri@gmail.com")
-Description: A Single Addin for Context Dependent Actions
+Description: A Single Addin for Context Dependent Actions.
 License: GPL-3
 Encoding: UTF-8
 Language: en
@@ -20,4 +20,8 @@ Imports:
     jsonlite,
     memoise,
     rstudioapi,
-    usethis
+    usethis,
+    methods,
+    RCurl,
+    clipr,
+    yaml
