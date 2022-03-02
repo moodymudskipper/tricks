@@ -96,17 +96,27 @@ if it is \code{"script"} it is extended to the full script}
 
 \item{symbol_ok}{Are symbols eligible ?}
 
+\item{empty_ok}{whether an empty section qualifies}
+
 \item{simple_only}{if \code{TRUE}, only symbols and calls to \code{::}, \code{:::}, \code{[},
 \code{[[} or \code{$} are considered. It should be used on condition calls to make sure
 we never evaluate a call that would have side effects.}
+
+\item{type}{atomic type}
 
 \item{litteral_ok}{Are literal strings or numbers eligible ?}
 
 \item{reserved_ok}{Are reserved words eligible ?}
 
-\item{class}{class used to check inheritance}
+\item{pattern}{regular expression}
 
-\item{txt}{A character object}
+\item{n_min}{minimal number of occurences to validate match}
+
+\item{n_max}{maximal number of occurences to validate match}
+
+\item{...}{additional arguments passed to \code{regexpr()}}
+
+\item{class}{class used to check inheritance}
 }
 \description{
 These helpers are meant to be used on the left hand side of the trick specification,
