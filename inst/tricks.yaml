@@ -1,0 +1,125 @@
+Edit user '.Rprofile':
+  description: Edit user '.Rprofile'
+  condition: selection_is_empty()
+  action: usethis::edit_r_profile()
+
+Edit project '.Rprofile':
+  description: Edit project '.Rprofile'
+  condition: selection_is_empty()
+  action: usethis::edit_r_profile(scope = "project")
+
+Edit '.Renviron':
+  description: Edit '.Renviron'
+  condition: selection_is_empty()
+  action: usethis::edit_r_environ()
+
+Edit RStudio snippets:
+  description: Edit RStudio snippets
+  condition: selection_is_empty()
+  action: usethis::edit_rstudio_snippets()
+
+Use git:
+  description: Use git
+  condition: selection_is_empty() && project_is_package() && !project_uses_git()
+  action: usethis::use_git()
+
+visit CRAN page of '{current_selection()}' package:
+  description: visit CRAN page of '{current_selection()}' package
+  condition: selection_is_cran_package()
+  action: usethis::browse_cran(current_selection())
+
+visit github page of '{current_selection()}' package:
+  description: visit github page of '{current_selection()}' package
+  condition: selection_is_cran_package()
+  action: usethis::browse_github(current_selection())
+
+Calculate package test coverage with `covr::report()`:
+  description: Calculate package test coverage with `covr::report()`
+  condition: selection_is_empty() && project_is_package()
+  action: covr::report()
+
+Install '{current_selection()}' package from CRAN:
+  description: Install '{current_selection()}' package from CRAN
+  condition: selection_is_cran_package()
+  action: remotes::install_cran(current_selection(), upgrade = "ask")
+
+Install '{current_selection()}' package  from github:
+  description: Install '{current_selection()}' package  from github
+  condition: selection_is_cran_package()
+  action: |
+    {
+        url <- usethis:::github_url(current_selection())
+        repo <- paste(strsplit(url, "/")[[1]][4:5], collapse = "/")
+        remotes::install_github(repo, upgrade = "ask")
+    }
+
+Reprex selection:
+  description: Reprex selection
+  condition: selection_is_parsable(symbol_ok = FALSE)
+  action: call_addin("reprex", "Reprex selection")
+
+Style selection wih 'styler':
+  description: Style selection wih 'styler'
+  condition: selection_is_parsable(symbol_ok = FALSE)
+  action: |
+    {
+        sel <- current_selection()
+        replace_selection(paste(styler::style_text(sel), collapse = "\n"))
+    }
+
+debugonce({current_selection()}):
+  description: debugonce({current_selection()})
+  condition: selection_is_function()
+  action: debugonce(.(current_call()))
+
+Lookup '{current_selection()}' on 'rdocumentation.org:
+  description: Lookup '{current_selection()}' on 'rdocumentation.org
+  condition: selection_is_symbol()
+  action: browseURL(paste0("https://www.rdocumentation.org/search?q=", current_selection()))
+
+Initiate `for` loop:
+  description: Initiate `for` loop
+  condition: selection_matches("^for\\((.*?) in (.*?)\\)$")
+  action: |
+    {
+        i_chr <- sub("^for\\((.*?) in (.*?)\\)$", "\\1", current_selection())
+        seq_chr <- sub("^for\\((.*?) in (.*?)\\)$", "\\2", current_selection())
+        seq_lng <- str2lang(seq_chr)
+        assign(i_chr, value = eval(seq_lng, .GlobalEnv)[[1]], envir = .GlobalEnv)
+    }
+
+allign `<-` assignments:
+  description: allign `<-` assignments
+  condition: selection_matches("<-", n_min = 2, target = "lines")
+  action: |
+    {
+        code <- current_lines()
+        pos <- regexpr("<-", code)
+        pad <- max(pos) - pos
+        code <- mapply(function(x, n) sub("<-", paste0(strrep(" ", n), "<-"), x), code, pad)
+        replace_current_lines(code)
+    }
+
+allign commas:
+  description: allign commas
+  condition: selection_matches(",", n_min = 2, target = "lines")
+  action: |
+    {
+        code <- current_lines()
+        pos <- regexpr(",", code)
+        pad <- max(pos) - pos
+        code <- mapply(function(x, n) sub(",", paste0(strrep(" ", n), ","), x), code, pad)
+        replace_current_lines(code)
+    }
+
+allign comments:
+  description: allign comments
+  condition: selection_matches("#", n_min = 2, target = "lines")
+  action: |
+    {
+        code <- current_lines()
+        pos <- regexpr("#", code)
+        pad <- max(pos) - pos
+        code <- mapply(function(x, n) sub("#", paste0(strrep(" ", n), "#"), x), code, pad)
+        replace_current_lines(code)
+    }
