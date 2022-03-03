@@ -4,105 +4,69 @@
 #' Add
 #' @param ... tricks to add (or replace), or names of tricks to remove
 #' @param .reset whether to remove existing tricks
+#' @inheritParams edit_yaml_tricks
 #' @export
-add_tricks <- function(..., .reset = FALSE) {
-  if(.reset) rm_tricks()
-  new_tricks_lazy <- eval(substitute(alist(...)))
-  # ignore empty args
-  new_tricks_lazy <- Filter(function(x) !identical(x, quote(expr=)), new_tricks_lazy)
-  pf <- parent.frame()
-  new_tricks <- lapply(new_tricks_lazy, eval, pf)
-  check_tricks(new_tricks)
-  # flatten "tricks_trick" objects
-  new_tricks <- unlist(new_tricks)
-  tricks <- getOption("tricks.tricks")
-  tricks[names(new_tricks)] <- new_tricks
-  options(tricks.tricks = tricks)
+load_tricks <- function(..., .reset = FALSE) {
+  if(.reset) unload_tricks()
+  new_tricks <- rlang::dots_list(
+    ...,
+    .ignore_empty = "all",
+    .homonyms = "error"
+    )
+  new_tricks <- fmls_to_tricks(new_tricks)
+  loaded_tricks <- global_tricks
+  list2env(new_tricks, global_tricks)
+  invisible(NULL)
 }
 
-check_tricks <- function(tricks) {
-  validate_trick <- function(x, nm) {
-    inherits(x, "tricks_trick") || (
-      nm != "" && inherits(x, "formula") && length(x) == 3
-    )
-  }
-  validated <- mapply(validate_trick, tricks, allNames(tricks))
-  if(!all(validated)) {
-    stop(
-      "Some tricks were not defined properly.\n",
-      paste(deparse(tricks[!validated]), collapse = "\n"),
-      call. = FALSE
-    )
-  }
+#' @export
+#' @rdname load_tricks
+unload_tricks <- function(...) {
+  rm(list = c(...), envir = global_tricks)
+  invisible(NULL)
 }
 
-#' @rdname add_tricks
+fmls_to_tricks <- function(tricks) {
+  fml_to_trick <- function(x, nm) {
+    if(inherits(x, "tricks_object")) return(x)
+    if (nm == "" | !rlang::is_formula(x, lhs = TRUE)) rlang::abort(
+      "`add_tricks()` accepts only trick objects or argument of form `<label> = <condition> ~ <action>`"
+    )
+    new_trick(nm, rlang::f_lhs(x), rlang::f_rhs(x))
+  }
+  Map(fml_to_trick, tricks, allNames(tricks))
+}
+
+#' @rdname load_tricks
 #' @export
-rm_tricks <- function(...) {
+uninstall_tricks <- function(..., project_level = FALSE) {
+  path <- if (project_level) ".r-tricks.yaml" else "~/.r-tricks.yaml"
+  tricks <- yaml_to_trick_list(path)
   nms <- c(...)
-  if(!length(nms)) {
-    options(tricks.tricks = list())
-  } else {
-    tricks <- getOption("tricks.tricks")
-    tricks[nms] <- NULL
-    options(tricks.tricks = tricks)
+  not_found <- setdiff(nms, names(tricks))
+  if (length(not_found)) {
+    msg <- sprintf(
+      "Not found in '%s': %s",
+      path,
+      toString(paste0("`", not_found, "`"))
+    )
+    rlang::abort(msg)
   }
+  tricks[nms] <- NULL
+  trick_list_to_yaml(tricks, path, append = FALSE)
 }
 
-#' @rdname add_tricks
+#' @rdname load_tricks
 #' @export
-show_tricks <- function() {
-  getOption("tricks.tricks")
+loaded_tricks <- function() {
+  as.list(global_tricks)
 }
 
-#' @rdname add_tricks
+#' @rdname load_tricks
 #' @export
-edit_tricks <- function() {
-  suppressMessages(usethis::edit_r_profile())
-  repeat {
-    context <- rstudioapi::getSourceEditorContext()
-    if(tolower(basename(context$path)) == ".rprofile") break
-  }
-  file_code <- context$contents
-  matches <-  regexpr("tricks::add_tricks\\(", file_code)
-  row <- which(matches != -1)
-  if(length(row)) {
-    col <- matches[row] + attr(matches, "match.length")[row]
-    send_cursor_at_position(row, col)
-  } else {
-    txt <- readLines(system.file("default_tricks/default_tricks.R", package = "tricks"))
-    txt <- paste0(c("", txt), collapse = "\n")
-    insert_at_position(txt)
-    message("A default `tricks::add_tricks()` call has been pasted in you '.RProfile'.",
-            "\nYou might modify it or leaving it as is for now!")
-  }
-
-  # make all functions available for the time of the call
-  # if(!"package:tricks" %in% search()) {
-  #   message("attaching {tricks} package")
-  #   library(tricks)
-  #   on.exit(detach("package:tricks"))
-  # }
-  rstudioapi::sendToConsole("library(tricks)")
-
-  message("Restart your session when you're done for changes to take effect")
-
-  # choice <- select.list(c("Save and restart R to make your changes available", "Cancel"))
-  #
-  # if(choice %in% c("Cancel", "")) {
-  #   rstudioapi::documentClose(context$id, save = FALSE)
-  # } else {
-  #   rstudioapi::documentClose(context$id, save = TRUE)
-  #   current_key <- fetch_current_hotkey()
-  #   msg <- if(is.null(current_key)) {
-  #     paste(
-  #       sep = "\n",
-  #       "You're almost set! To define a RStudio hotkey go to :",
-  #       "Tools => Modify Keyboard Shortcuts..."
-  #     )
-  #   } else {
-  #     paste0("You're set! Press `", current_key, "` to trigger the addin\n")
-  #   }
-  #   rstudioapi::restartSession(message(msg))
-  # }
+edit_tricks <- function(project_level = FALSE) {
+  message("Attaching {tricks} package, estart your session when you're done for changes to take effect")
+  library(tricks)
+  path <- if (project_level) ".r-tricks.yaml" else "~/.r-tricks.yaml"
+  file.edit(path)
 }

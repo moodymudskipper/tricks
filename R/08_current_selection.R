@@ -1,5 +1,5 @@
 
-# not sure if we really need curren_lines or document_code in the end,
+# not sure if we really need current_lines or document_code in the end,
 # now he only difference is we don't collapse with "\n"
 
 #' Current selection
@@ -106,3 +106,16 @@ current_code_block <- function() {
   current_block_ids <- unique(all_block_ids[ind])
   code[all_block_ids %in% current_block_ids]
 }
+
+#' @export
+#' @rdname current_selection
+current_quoted_status <- function() {
+  context <- rstudioapi::getSourceEditorContext()
+  doc_code <- context$contents
+  start <- rstudioapi::primary_selection(context)$range[[1]]
+  code <- doc_code[1:start[[1]]]
+  code[[start[[1]]]] <- substr(code[[start[[1]]]], 1, start[[2]])
+  txt <- paste(code, collapse = "\n")
+  quote_status(txt)
+}
+

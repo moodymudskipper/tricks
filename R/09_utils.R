@@ -44,3 +44,70 @@ fake_selection <- function(new_selection) {
 called_through_snippets <- function() {
   identical(.rs.rpc.transform_snippet, sys.calls()[[c(1,1)]])
 }
+
+
+# given some incomplete code as a string, return quoted status at end of string
+quote_status <- function(txt) {
+  # commented characters incl # but not incl \n will be marked as  "commented"\
+  # other quotes are ", ', `, and %
+  # % cannot be escaped inside of %%
+
+  # remove escaped quotes
+  txt <- gsub("\\\\\"", "", txt)
+  txt <- gsub("\\\\\'", "", txt)
+  txt <- gsub("\\\\\`", "", txt)
+
+  split_txt <- strsplit(txt, "")[[1]]
+
+  i <- 1
+  n <- length(split_txt)
+  while (i <= n) {
+    if (split_txt[[i]] == "#") {
+      state <- "commented"
+      if(i == n) return(state)
+      i <- i + 1
+      while(split_txt[[i]] != '\n') {
+        if(i == n) return(state)
+        i <- i + 1
+      }
+    } else if (split_txt[[i]] == '"') {
+      state <- "double_quoted"
+      if(i == n) return(state)
+      i <- i + 1
+      while(split_txt[[i]] != '"') {
+        if(i == n) return(state)
+        i <- i + 1
+      }
+    } else if (split_txt[[i]] == "'") {
+      state <- "single_quoted"
+      if(i == n) return(state)
+      i <- i + 1
+      while(split_txt[[i]] != "'") {
+        if(i == n) return(state)
+        i <- i + 1
+      }
+    } else if (split_txt[[i]] == "`") {
+      state <- "back_quoted"
+      if(i == n) return(state)
+      i <- i + 1
+      while(split_txt[[i]] != "`") {
+        state <- "back_quoted"
+        if(i == n) return(state)
+        i <- i + 1
+      }
+    } else if (split_txt[[i]] == "%") {
+      state <- "infix_quoted"
+      if(i == n) return(state)
+      i <- i + 1
+      while(split_txt[[i]] != "%") {
+        state <- "infix_quoted"
+        if(i == n) return(state)
+        i <- i + 1
+      }
+    }
+
+    state <- "unquoted"
+    if(i == n) return(state)
+    i <- i + 1
+  }
+}

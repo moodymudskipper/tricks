@@ -11,6 +11,7 @@
 \alias{current_path}
 \alias{document_code}
 \alias{current_code_block}
+\alias{current_quoted_status}
 \title{Current selection}
 \usage{
 current_selection(target = c("default", "lines", "script"))
@@ -32,6 +33,8 @@ current_path(full = TRUE)
 document_code()
 
 current_code_block()
+
+current_quoted_status()
 }
 \arguments{
 \item{target}{If \code{target} is \code{"lines"} the selection is extended to lines,

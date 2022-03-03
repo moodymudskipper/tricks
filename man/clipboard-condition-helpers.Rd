@@ -4,6 +4,7 @@
 \alias{clipboard_contains_text}
 \alias{clipboard_is_parsable}
 \alias{clipboard_text}
+\alias{clip_board_text_matches}
 \title{Clipboard Focused Condition Helpers}
 \usage{
 clipboard_contains_text()
@@ -11,6 +12,17 @@ clipboard_contains_text()
 clipboard_is_parsable()
 
 clipboard_text()
+
+clip_board_text_matches(pattern, n_min = 1L, n_max = Inf, ...)
+}
+\arguments{
+\item{pattern}{regular expression}
+
+\item{n_min}{minimal number of occurences to validate match}
+
+\item{n_max}{maximal number of occurences to validate match}
+
+\item{...}{additional arguments passed to \code{regexpr()}}
 }
 \description{
 Clipboard Focused Condition Helpers

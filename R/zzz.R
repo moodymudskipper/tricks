@@ -1,3 +1,6 @@
+#' @importFrom methods allNames
+#' @importFrom utils capture.output file.edit globalVariables
+
 # memoise functions to avoid redundant computation of the current selection
 # We automate the proces for convenience, it includes building programatically
 # a `forget_all()` function
@@ -17,3 +20,9 @@ local({
   forget_all <- as.function(list(forget_all_body), envir = env)
   assign("forget_all", forget_all, env)
 })
+
+globalVariables(c(".rs.rpc.transform_snippet"))
+
+.onLoad <- function(...) {
+  load_yaml_tricks()
+}
