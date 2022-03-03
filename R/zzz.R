@@ -6,6 +6,9 @@ globalVariables(c(".rs.rpc.transform_snippet"))
 forget_all <- NULL
 
 .onLoad <- function(libname, pkgname) {
+  # to avoid check complaints since we know what we're doing here
+  # update our namespace with memoised functions
+  aiN <- assignInNamespace
   ns <- asNamespace(pkgname)
 
   # - We memoise functions to avoid redundant computation of the current selection
@@ -20,7 +23,7 @@ forget_all <- NULL
 
   # memoise them and replace them in namespace ---------------------------------
   for (nm in prefixed_fun_nms) {
-    assignInNamespace(
+    aiN(
       x = nm,
       value = memoise::memoise(ns[[nm]]),
       ns = ns
@@ -32,7 +35,7 @@ forget_all <- NULL
   txt <- paste0("memoise::forget(", prefixed_fun_nms, ")")
   forget_all_body <- as.call(c(quote(`{`), as.list(parse(text = txt))))
   forget_all <- as.function(list(forget_all_body), envir = ns)
-  assignInNamespace(
+  aiN(
     x = "forget_all",
     value = forget_all,
     ns = ns
