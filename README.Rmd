@@ -170,20 +170,22 @@ Let's go through a few examples.
 ## Define tricks with `load_tricks()`
 
 While we recommend using YAML files to store tricks, it might be useful
-to define tricks directly in R code for easier trial and error and benefiting from 
-autocomplete. This can be achieved using `add_tricks()`, its syntax is :
+to define tricks directly in R code for easier trial. 
+This can be achieved using `load_tricks()`, its syntax is :
 
 ```{r, , eval = FALSE}
-tricks::add_tricks(
+tricks::load_tricks(
   "<label1>" = <condition1> ~ <action1>, 
   "<label2>" = <condition2> ~ <action2>, 
   ...)
 ```
 
+It also accepts trick objects defined with `new_trick()`
+
 To reproduce the tricks showcased above we would run :
 
 ```{r, eval = FALSE}
-tricks::add_tricks(
+tricks::load_tricks(
   "Edit user '.Rprofile'" =
     selection_is_empty() ~     
     usethis::edit_r_profile(), 
