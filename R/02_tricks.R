@@ -65,7 +65,7 @@ loaded_tricks <- function() {
 #' @rdname load_tricks
 #' @export
 edit_tricks <- function(project_level = FALSE) {
-  message("Attaching {tricks} package, estart your session when you're done for changes to take effect")
+  message("Attaching {tricks} package, restart your session when you're done for changes to take effect")
   library(tricks)
   path <- if (project_level) ".r-tricks.yaml" else "~/.r-tricks.yaml"
   file.edit(path)
