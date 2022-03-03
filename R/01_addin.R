@@ -24,7 +24,7 @@ addin <- function() {
   current_selection()
   current_env()
 
-  tricks <- as.list(global_tricks)
+  tricks <- as.list(globals$tricks)
   if(!length(tricks)) {
     message("No tricks to display")
     return(invisible(NULL))
