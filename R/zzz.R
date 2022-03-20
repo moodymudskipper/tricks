@@ -51,3 +51,9 @@ forget_all <- NULL
 # are not useds
 clipr::read_clip
 RCurl::url.exists
+
+
+# for backward compatibility
+str2lang <- function(x) {
+  parse(text = x)[[1]]
+}
