@@ -44,3 +44,10 @@ forget_all <- NULL
   # load YAML tricks -----------------------------------------------------------
   load_yaml_tricks()
 }
+
+# Use packages to avoid notes
+# I think a memoised function's body doesn't contain the original so the calls to
+# clipr:: and RCurl:: are hidden and then the checks for old Ubuntu 18.04 complain that some imported packages
+# are not useds
+clipr::read_clip
+RCurl::url.exists
