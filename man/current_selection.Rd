@@ -14,7 +14,10 @@
 \alias{current_quoted_status}
 \title{Current selection}
 \usage{
-current_selection(target = c("default", "lines", "script"))
+current_selection(
+  target = c("default", "lines", "script"),
+  window = c("source", "console", "active")
+)
 
 current_call(target = c("default", "lines", "script"))
 
