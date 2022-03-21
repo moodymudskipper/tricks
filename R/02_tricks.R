@@ -14,15 +14,15 @@ load_tricks <- function(..., .reset = FALSE) {
     .homonyms = "error"
     )
   new_tricks <- fmls_to_tricks(new_tricks)
-  loaded_tricks <- global_tricks
-  list2env(new_tricks, global_tricks)
+  loaded_tricks <- globals$tricks
+  list2env(new_tricks, globals$tricks)
   invisible(NULL)
 }
 
 #' @export
 #' @rdname load_tricks
 unload_tricks <- function(...) {
-  rm(list = c(...), envir = global_tricks)
+  rm(list = c(...), envir = globals$tricks)
   invisible(NULL)
 }
 
@@ -59,7 +59,7 @@ uninstall_tricks <- function(..., project_level = FALSE) {
 #' @rdname load_tricks
 #' @export
 loaded_tricks <- function() {
-  as.list(global_tricks)
+  as.list(globals$tricks)
 }
 
 #' @rdname load_tricks

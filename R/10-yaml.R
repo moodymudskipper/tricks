@@ -57,9 +57,6 @@ trick_to_yaml_string <- function(trick) {
   paste(c(label_line, trick_lines), collapse = "\n")
 }
 
-
-global_tricks <- new.env()
-
 #' Load tricks from YAML file
 #'
 #' @param file Path to a YAML file, if `NULL` (the default) tricks are loaded
@@ -91,7 +88,7 @@ load_yaml_tricks <- function(file = NULL, labels = NULL, reset = FALSE) {
     tricks <- tricks[labels]
   }
 
-  list2env(tricks, global_tricks)
+  list2env(tricks, globals$tricks)
 
   invisible(file)
 }
