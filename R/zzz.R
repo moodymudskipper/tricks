@@ -6,6 +6,13 @@ globalVariables(c(".rs.rpc.transform_snippet"))
 forget_all <- NULL
 
 .onLoad <- function(libname, pkgname) {
+  # Use packages to avoid notes
+  # I think a memoised function's body doesn't contain the original so the calls to
+  # clipr:: and RCurl:: are hidden and then the checks for old Ubuntu 18.04 complain that some imported packages
+  # are not used
+  quote(clipr::read_clip())
+  quote(RCurl::url.exists())
+
   # to avoid check complaints since we know what we're doing here
   # update our namespace with memoised functions
   aiN <- assignInNamespace
@@ -45,12 +52,7 @@ forget_all <- NULL
   load_yaml_tricks()
 }
 
-# Use packages to avoid notes
-# I think a memoised function's body doesn't contain the original so the calls to
-# clipr:: and RCurl:: are hidden and then the checks for old Ubuntu 18.04 complain that some imported packages
-# are not useds
-quote(clipr::read_clip())
-quote(RCurl::url.exists())
+
 
 
 # for backward compatibility
