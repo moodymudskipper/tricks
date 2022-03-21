@@ -1,6 +1,15 @@
-
 # not sure if we really need current_lines or document_code in the end,
 # now he only difference is we don't collapse with "\n"
+
+current_context <- function(window = c("source", "console", "active")) {
+  window <- match.arg(window)
+  switch(
+    window,
+    source = rstudioapi::getSourceEditorContext(),
+    console = rstudioapi::getConsoleEditorContext(),
+    active = rstudioapi::getActiveDocumentContext()
+  )
+}
 
 #' Current selection
 #'
@@ -10,11 +19,12 @@
 #'   if it is `"script"` it is extended to the full script
 #' @param full boolean. Whether to return full path or base name
 #' @export
-current_selection <- function(target = c("default", "lines", "script")) {
+current_selection <- function(target = c("default", "lines", "script"), window = c("source", "console", "active")) {
   target <- match.arg(target)
+  window <- match.arg(window)
   if(target == "lines") return(paste(current_lines(), collapse="\n"))
   if(target == "script") return(paste(document_code(), collapse="\n"))
-  context       <- rstudioapi::getSourceEditorContext()
+  context       <- current_context(window)
   selection_txt <- rstudioapi::primary_selection(context)[["text"]]
   selection_txt
 }
@@ -53,7 +63,7 @@ current_value <- function(target = c("default", "lines", "script")) {
 #' @rdname current_selection
 current_line_numbers <- function(target = c("default", "lines", "script")) {
   target <- match.arg(target)
-  context       <- rstudioapi::getSourceEditorContext()
+  context <- current_context("source")
   if(target == "script") return(seq_along(context$contents))
   start_row <- context$selection[[1]]$range$start[["row"]]
   end_row <- context$selection[[1]]$range$end[["row"]]
@@ -80,7 +90,7 @@ current_indentation <- function(target = c("default", "lines", "script")) {
 #' @rdname current_selection
 current_path <- function(full = TRUE) {
   current_code_block()
-  context       <- rstudioapi::getSourceEditorContext()
+  context <- current_context("source")
   path <- context$path
   if(!full) path <- basename(path)
   path
@@ -89,7 +99,7 @@ current_path <- function(full = TRUE) {
 #' @export
 #' @rdname current_selection
 document_code <- function() {
-  context <- rstudioapi::getSourceEditorContext()
+  context <- current_context("source")
   context$contents
 }
 
@@ -110,7 +120,8 @@ current_code_block <- function() {
 #' @export
 #' @rdname current_selection
 current_quoted_status <- function() {
-  context <- rstudioapi::getSourceEditorContext()
+  # FIXME : make this work in console
+  context   <- current_context("source")
   doc_code <- context$contents
   start <- rstudioapi::primary_selection(context)$range[[1]]
   code <- doc_code[1:start[[1]]]

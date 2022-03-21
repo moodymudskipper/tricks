@@ -27,7 +27,8 @@ call_addin <- function(package, name) {
 #' @rdname action-helpers
 replace_selection <- function(txt) {
   if(!is.character(txt)) txt <- deparse(txt)
-  context       <- rstudioapi::getSourceEditorContext()
+  # FIXME : make this work in console
+  context   <- current_context("source")
   rstudioapi::modifyRange(context$selection[[c(1,1)]], txt, context$id)
 }
 
@@ -36,7 +37,7 @@ replace_selection <- function(txt) {
 replace_current_lines <- function(txt) {
   if(!is.character(txt)) txt <- deparse(txt)
   txt <- paste(txt, collapse = "\n")
-  context       <- rstudioapi::getSourceEditorContext()
+  context <- current_context("source")
   start_row <- context$selection[[1]]$range$start[["row"]]
   start_col <- 1
   end_row <- context$selection[[1]]$range$end[["row"]]
@@ -52,7 +53,8 @@ replace_current_lines <- function(txt) {
 #' @rdname action-helpers
 insert_at_position <- function(txt, row=Inf, col=Inf) {
   if(!is.character(txt)) txt <- deparse(txt)
-  context       <- rstudioapi::getSourceEditorContext()
+  # FIXME : make this work in console
+  context       <- current_context("source")
   rstudioapi::insertText(c(row, col), text = txt, id = context$id)
 }
 
@@ -60,7 +62,8 @@ insert_at_position <- function(txt, row=Inf, col=Inf) {
 #' @export
 #' @rdname action-helpers
 send_cursor_at_position <- function(row=1, col=1) {
-  context   <- rstudioapi::getSourceEditorContext()
+  # FIXME : make this work in console
+  context   <- current_context("source")
   rstudioapi::setCursorPosition(
     rstudioapi::document_position(row,col),
     id = context$id)
