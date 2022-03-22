@@ -43,6 +43,8 @@ current_quoted_status()
 \item{target}{If \code{target} is \code{"lines"} the selection is extended to lines,
 if it is \code{"script"} it is extended to the full script}
 
+\item{window}{Window to gather the context information from}
+
 \item{full}{boolean. Whether to return full path or base name}
 }
 \description{

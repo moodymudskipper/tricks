@@ -18,6 +18,7 @@ current_context <- function(window = c("source", "console", "active")) {
 #' @param target If `target` is `"lines"` the selection is extended to lines,
 #'   if it is `"script"` it is extended to the full script
 #' @param full boolean. Whether to return full path or base name
+#' @param window Window to gather the context information from
 #' @export
 current_selection <- function(target = c("default", "lines", "script"), window = c("source", "console", "active")) {
   target <- match.arg(target)
