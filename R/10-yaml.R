@@ -81,7 +81,15 @@ load_yaml_tricks <- function(file = NULL, labels = NULL) {
     return(invisible(NULL))
   }
 
-  tricks <- yaml_to_trick_list(file)
+  tricks <- try(yaml_to_trick_list(file), silent = TRUE)
+  if(inherits(tricks, "try-error")) {
+    msg <- paste0(
+      "Could not load '", file, "' into tricks. You might fix with `tricks::edit_tricks()`.\n",
+      attr(tricks, "condition")$message
+    )
+    warning(msg, call. = FALSE)
+    return(invisible(file))
+  }
   if (!is.null(labels)) {
     #FIXME validate labels
     tricks <- tricks[labels]
