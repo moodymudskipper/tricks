@@ -62,7 +62,6 @@ trick_to_yaml_string <- function(trick) {
 #' @param file Path to a YAML file, if `NULL` (the default) tricks are loaded
 #'   from the user level and project level `.r-tricks.yaml` files if they exist
 #' @param labels labels of tricks to load, by default all tricks are loaded
-#' @param reset Whether to unload previously loaded tricks
 #'
 #' @return Returns the first argument invisibly, called for side effects.
 #' @export
@@ -70,7 +69,7 @@ trick_to_yaml_string <- function(trick) {
 #' @examples
 #' yaml_path <- system.file("tricks.yaml", package = "tricks")
 #' load_yaml_tricks(yaml_path)
-load_yaml_tricks <- function(file = NULL, labels = NULL, reset = FALSE) {
+load_yaml_tricks <- function(file = NULL, labels = NULL) {
   if (is.null(file)) {
     if (file.exists(".r-tricks.yaml")) {
       load_yaml_tricks(".r-tricks.yaml")
