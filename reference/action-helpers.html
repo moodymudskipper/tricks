@@ -52,26 +52,31 @@ which is evaluated when the trick is selected.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">call_addin</span><span class="op">(</span><span class="va">package</span>, <span class="va">name</span><span class="op">)</span>
-
-<span class="fu">replace_selection</span><span class="op">(</span><span class="va">txt</span><span class="op">)</span>
-
-<span class="fu">replace_current_lines</span><span class="op">(</span><span class="va">txt</span><span class="op">)</span>
-
-<span class="fu">insert_at_position</span><span class="op">(</span><span class="va">txt</span>, row <span class="op">=</span> <span class="cn">Inf</span>, col <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span>
-
-<span class="fu">send_cursor_at_position</span><span class="op">(</span>row <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">call_addin</span><span class="op">(</span><span class="va">package</span>, <span class="va">name</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">replace_selection</span><span class="op">(</span><span class="va">txt</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">replace_current_lines</span><span class="op">(</span><span class="va">txt</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">insert_at_position</span><span class="op">(</span><span class="va">txt</span>, row <span class="op">=</span> <span class="cn">Inf</span>, col <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">send_cursor_at_position</span><span class="op">(</span>row <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>package, name</dt>
 <dd><p>package and addin name</p></dd>
+
+
 <dt>txt</dt>
 <dd><p>A character object, or will be coerced to character using <code><a href="https://rdrr.io/r/base/deparse.html" class="external-link">deparse()</a></code>.
 Used as a replacement for the selection text.</p></dd>
+
+
 <dt>row, col</dt>
 <dd><p>row and column in he editor</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -92,7 +97,7 @@ Used as a replacement for the selection text.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer></div>

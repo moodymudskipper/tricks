@@ -50,36 +50,47 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">new_trick</span><span class="op">(</span><span class="va">label</span>, <span class="va">condition</span>, <span class="va">action</span>, description <span class="op">=</span> <span class="va">label</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">new_trick</span><span class="op">(</span><span class="va">label</span>, <span class="va">condition</span>, <span class="va">action</span>, description <span class="op">=</span> <span class="va">label</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>label</dt>
 <dd><p>A string</p></dd>
+
+
 <dt>condition</dt>
 <dd><p>A call or a one sided formula, using condition helpers and context informers, whose
 right hand side expressions returns a boolean when evaluated by tricks</p></dd>
+
+
 <dt>action</dt>
 <dd><p>A call or a one sided formula, using action helpers and context informers, whose
 right hand side triggers the desired actions when evaluated by tricks</p></dd>
+
+
 <dt>description</dt>
 <dd><p>The description of the trick, for documentation purposes</p></dd>
+
+
 <dt>...</dt>
 <dd><p>other properties to print with the object and in YAML files</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of class "trick_object"</p>
+    
+
+<p>A list of class "trick_object"</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">new_trick</span><span class="op">(</span></span>
-<span class="r-in"><span class="st">"Edit user '.Rprofile'"</span>,</span>
-<span class="r-in"><span class="op">~</span> <span class="fu"><a href="selection-condition-helpers.html">selection_is_empty</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in"><span class="op">~</span> <span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">edit_r_profile</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">new_trick</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="st">"Edit user '.Rprofile'"</span>,</span></span>
+<span class="r-in"><span><span class="op">~</span> <span class="fu"><a href="selection-condition-helpers.html">selection_is_empty</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="op">~</span> <span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">edit_r_profile</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # A trick for the {tricks} package</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Edit user '.Rprofile':</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   description: Edit user '.Rprofile'</span>
@@ -99,7 +110,7 @@ right hand side triggers the desired actions when evaluated by tricks</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer></div>

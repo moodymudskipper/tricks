@@ -83,18 +83,18 @@
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"moodymudskipper/tricks"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"moodymudskipper/tricks"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="install-and-use-tricks">Install and use tricks<a class="anchor" aria-label="anchor" href="#install-and-use-tricks"></a>
 </h2>
-<p>Tricks are stored in YAML files, your own tricks are stored in a <code>.r-tricks.yaml</code> files located next to your <code>.Rprofile</code> files, this way you can define them at the project or at the user level.</p>
+<p>Tricks are stored in YAML files, installed tricks are stored in a <code>.r-tricks.yaml</code> files located next to your <code>.Rprofile</code> files, this way you can define them at the project or at the user level.</p>
 <p>These can be installed from packages or other YAML files using <code><a href="reference/install_tricks.html">install_tricks()</a></code>.</p>
 <ul>
 <li>
-<code><a href="reference/install_tricks.html">install_tricks()</a></code>, without arguments, proposes you some tricks that come with the {tricks} package.</li>
+<code><a href="reference/install_tricks.html">install_tricks()</a></code> without arguments installs tricks that come with the {tricks} package.</li>
 <li>
-<code>install_tricks("some_tricks.yaml")</code>, proposes you to install tricks defined in a specific file</li>
+<code>install_tricks("some_tricks.yaml")</code> installs tricks defined in a specific file</li>
 <li>
 <code>install_tricks("pkg")</code> proposes you to install tricks from a package, the developer of such package should include a <code>tricks.yaml</code> file in the <code>inst</code> subfolder of their package.</li>
 </ul>
@@ -138,7 +138,7 @@
 <p>We see below that whenever the selected code is parsable and is more than just a symbol, the action will be proposed.</p>
 <p><em>INSERT GIF</em></p>
 <p><code><a href="reference/selection-condition-helpers.html">selection_is_parsable()</a></code> is another <strong>condition helper</strong>. <code><a href="reference/action-helpers.html">call_addin()</a></code> is an <strong>action helper</strong>, there are more of them documented in `?``action-helpers```.</p>
-<p>It is good practice to have narrow conditions around our use cases so as our list of tricks grows we only display those that apply. We could have defined <code>tricks::add_tricks("Reprex selection" = TRUE ~ call_addin("reprex", "Reprex selection"))</code> but then Reprex Selection would always be proposed even when it doesn’t apply.</p>
+<p>It is good practice to have narrow conditions around our use cases so as our list of tricks grows we only display those that apply.</p>
 </div>
 <div class="section level3">
 <h3 id="debugonce">
@@ -154,50 +154,64 @@
 <p><em>INSERT GIF</em></p>
 <p><code><a href="reference/selection-condition-helpers.html">selection_is_function()</a></code> is another <strong>condition helper</strong>. <code><a href="reference/current_selection.html">current_selection()</a></code> and <code><a href="reference/current_selection.html">current_call()</a></code> are <strong>context informers</strong>, they are documented in <code><a href="reference/current_selection.html">?current_selection</a></code>.</p>
 <p>We note a couple new things here : * We used {glue} notation in the label, this is handy to provide custom labels * We used <code>.()</code> inside <code><a href="https://rdrr.io/r/base/debug.html" class="external-link">debugonce()</a></code>, this is the same <code>.()</code> that we find in <code><a href="https://rdrr.io/r/base/bquote.html" class="external-link">bquote()</a></code>, <code><a href="https://rdrr.io/r/base/debug.html" class="external-link">debugonce()</a></code> uses NSE and supporting <code>.()</code> in actions and conditions permit us to program with such functions conveniently.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tricks<span class="sc">::</span><span class="fu">add_tricks</span>(</span>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load_tricks</span>(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&lt;label1&gt;"</span> <span class="ot">=</span> <span class="er">&lt;</span>condition1<span class="sc">&gt;</span> <span class="er">~</span> <span class="er">&lt;</span>action1<span class="sc">&gt;</span>, </span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&lt;label2&gt;"</span> <span class="ot">=</span> <span class="er">&lt;</span>condition2<span class="sc">&gt;</span> <span class="er">~</span> <span class="er">&lt;</span>action2<span class="sc">&gt;</span>, </span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  ...)</span></code></pre></div>
-<p>The package contains a suit of functions to help you define actions and conditions conveniently.</p>
+<p>The package contains a set of functions to help you define actions and conditions conveniently.</p>
 <p>Let’s go through a few examples.</p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="define-tricks-with-add_tricks">Define tricks with <code>add_tricks()</code>
-<a class="anchor" aria-label="anchor" href="#define-tricks-with-add_tricks"></a>
+<h2 id="define-tricks-with-load_tricks">Define tricks with <code>load_tricks()</code>
+<a class="anchor" aria-label="anchor" href="#define-tricks-with-load_tricks"></a>
 </h2>
-<p>While we recommend using YAML files to display store tricks, it might be useful to define tricks directly in R code for easier trial and error and benefiting from autocomplete. This can be achieved using <code>add_tricks()</code>, its syntax is :</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tricks<span class="sc">::</span><span class="fu">add_tricks</span>(</span>
+<p>While we recommend using YAML files to store tricks, it might be useful to define tricks directly in R code for easier trial. This can be achieved using <code><a href="reference/load_tricks.html">load_tricks()</a></code>, its syntax is :</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tricks<span class="sc">::</span><span class="fu">load_tricks</span>(</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&lt;label1&gt;"</span> <span class="ot">=</span> <span class="er">&lt;</span>condition1<span class="sc">&gt;</span> <span class="er">~</span> <span class="er">&lt;</span>action1<span class="sc">&gt;</span>, </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&lt;label2&gt;"</span> <span class="ot">=</span> <span class="er">&lt;</span>condition2<span class="sc">&gt;</span> <span class="er">~</span> <span class="er">&lt;</span>action2<span class="sc">&gt;</span>, </span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  ...)</span></code></pre></div>
+<p>It also accepts trick objects defined with <code><a href="reference/new_trick.html">new_trick()</a></code></p>
 <p>To reproduce the tricks showcased above we would run :</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">tricks</span><span class="fu">::</span><span class="fu">add_tricks</span><span class="op">(</span>
-  <span class="st">"Edit user '.Rprofile'"</span> <span class="op">=</span>
-    <span class="fu"><a href="reference/selection-condition-helpers.html">selection_is_empty</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span>     
-    <span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">edit_r_profile</a></span><span class="op">(</span><span class="op">)</span>, 
-
-  <span class="st">"Edit project '.Rprofile'"</span> <span class="op">=</span>
-    <span class="fu"><a href="reference/selection-condition-helpers.html">selection_is_empty</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span>                      
-    <span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">edit_r_profile</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"project"</span><span class="op">)</span>, 
-  
-  <span class="st">"Reprex selection"</span> <span class="op">=</span>
-    <span class="fu"><a href="reference/selection-condition-helpers.html">selection_is_parsable</a></span><span class="op">(</span>symbol_ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">~</span>  
-    <span class="fu"><a href="reference/action-helpers.html">call_addin</a></span><span class="op">(</span><span class="st">"reprex"</span>, <span class="st">"Reprex selection"</span><span class="op">)</span>,
-  
-  <span class="co"># label : here using glue syntax to have dynamic action names</span>
-  <span class="st">"debugonce({current_selection()})"</span> <span class="op">=</span> 
-    <span class="co"># condition : selection evaluates to function</span>
-    <span class="fu"><a href="reference/selection-condition-helpers.html">selection_is_function</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> 
-    <span class="co"># action    : run debugonce, we use `bquote()`'s `.()` notation to work around NSE issues</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/debug.html" class="external-link">debugonce</a></span><span class="op">(</span><span class="fu">.</span><span class="op">(</span><span class="fu"><a href="reference/current_selection.html">current_call</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,      
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">tricks</span><span class="fu">::</span><span class="fu"><a href="reference/load_tricks.html">load_tricks</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Edit user '.Rprofile'"</span> <span class="op">=</span></span>
+<span>    <span class="fu"><a href="reference/selection-condition-helpers.html">selection_is_empty</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span>     </span>
+<span>    <span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">edit_r_profile</a></span><span class="op">(</span><span class="op">)</span>, </span>
+<span></span>
+<span>  <span class="st">"Edit project '.Rprofile'"</span> <span class="op">=</span></span>
+<span>    <span class="fu"><a href="reference/selection-condition-helpers.html">selection_is_empty</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span>                      </span>
+<span>    <span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">edit_r_profile</a></span><span class="op">(</span>scope <span class="op">=</span> <span class="st">"project"</span><span class="op">)</span>, </span>
+<span>  </span>
+<span>  <span class="st">"Reprex selection"</span> <span class="op">=</span></span>
+<span>    <span class="fu"><a href="reference/selection-condition-helpers.html">selection_is_parsable</a></span><span class="op">(</span>symbol_ok <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">~</span>  </span>
+<span>    <span class="fu"><a href="reference/action-helpers.html">call_addin</a></span><span class="op">(</span><span class="st">"reprex"</span>, <span class="st">"Reprex selection"</span><span class="op">)</span>,</span>
+<span>  </span>
+<span>  <span class="co"># label : here using glue syntax to have dynamic action names</span></span>
+<span>  <span class="st">"debugonce({current_selection()})"</span> <span class="op">=</span> </span>
+<span>    <span class="co"># condition : selection evaluates to function</span></span>
+<span>    <span class="fu"><a href="reference/selection-condition-helpers.html">selection_is_function</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> </span>
+<span>    <span class="co"># action    : run debugonce, we use `bquote()`'s `.()` notation to work around NSE issues</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/debug.html" class="external-link">debugonce</a></span><span class="op">(</span><span class="fu">.</span><span class="op">(</span><span class="fu"><a href="reference/current_selection.html">current_call</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,      </span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="where-are-these-tricks-stored--can-i-remove-some-">Where are these tricks stored ? Can I remove some ?<a class="anchor" aria-label="anchor" href="#where-are-these-tricks-stored--can-i-remove-some-"></a>
+<h2 id="explore-and-edit-tricks">Explore and edit tricks<a class="anchor" aria-label="anchor" href="#explore-and-edit-tricks"></a>
 </h2>
-<p>They’re stored in the <code>"tricks.tricks"</code> option which you can display with <code>getOption("tricks.tricks")</code> or <code>tricks::show_tricks()</code>. You can remove tricks by calling <code>tricks::rm_tricks()</code> with the labels of the tricks to remove.</p>
+<ul>
+<li>
+<code><a href="reference/load_tricks.html">edit_tricks()</a></code> to open YAML file</li>
+<li>
+<code><a href="reference/install_tricks.html">install_tricks()</a></code> to add new entries to YAML files</li>
+<li>
+<code><a href="reference/load_tricks.html">uninstall_tricks()</a></code> to remove some</li>
+<li>
+<code><a href="reference/load_tricks.html">loaded_tricks()</a></code> or <code>View(loaded_tricks())</code> to explore loaded tricks</li>
+<li>
+<code><a href="reference/load_tricks.html">load_tricks()</a></code> to load trick objects or load tricks built from formulas</li>
+<li>
+<code><a href="reference/load_tricks.html">unload_tricks()</a></code> to unload some</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="isnt-it-slow-to-have-a-lot-of-tricks--is-it-safe-">Isn’t it slow to have a lot of tricks ? Is it safe ?<a class="anchor" aria-label="anchor" href="#isnt-it-slow-to-have-a-lot-of-tricks--is-it-safe-"></a>
@@ -253,7 +267,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer>

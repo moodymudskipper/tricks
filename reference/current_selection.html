@@ -50,27 +50,30 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">current_selection</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">current_call</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">current_expr</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">current_value</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">current_line_numbers</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">current_lines</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">current_indentation</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">current_path</span><span class="op">(</span>full <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">document_code</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">current_code_block</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">current_quoted_status</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">current_selection</span><span class="op">(</span></span>
+<span>  target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span>,</span>
+<span>  window <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="st">"console"</span>, <span class="st">"active"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">current_call</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">current_expr</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">current_value</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">current_line_numbers</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">current_lines</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">current_indentation</span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"lines"</span>, <span class="st">"script"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">current_path</span><span class="op">(</span>full <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">document_code</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">current_code_block</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">current_quoted_status</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -78,8 +81,17 @@
     <dl><dt>target</dt>
 <dd><p>If <code>target</code> is <code>"lines"</code> the selection is extended to lines,
 if it is <code>"script"</code> it is extended to the full script</p></dd>
+
+
+<dt>window</dt>
+<dd><p>One of <code>"source"</code> (for the source window), <code>"console"</code>
+(for the console) or <code>"active"</code> (for the active document).
+See rstudio-editors.</p></dd>
+
+
 <dt>full</dt>
 <dd><p>boolean. Whether to return full path or base name</p></dd>
+
 </dl></div>
 
   </div>
@@ -94,7 +106,7 @@ if it is <code>"script"</code> it is extended to the full script</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
 </div>
 
       </footer></div>
