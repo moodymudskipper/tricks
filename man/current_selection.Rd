@@ -43,6 +43,10 @@ current_quoted_status()
 \item{target}{If \code{target} is \code{"lines"} the selection is extended to lines,
 if it is \code{"script"} it is extended to the full script}
 
+\item{window}{One of \code{"source"} (for the source window), \code{"console"}
+(for the console) or \code{"active"} (for the active document).
+See \link{rstudio-editors}.}
+
 \item{full}{boolean. Whether to return full path or base name}
 }
 \description{

@@ -18,8 +18,13 @@ current_context <- function(window = c("source", "console", "active")) {
 #' @param target If `target` is `"lines"` the selection is extended to lines,
 #'   if it is `"script"` it is extended to the full script
 #' @param full boolean. Whether to return full path or base name
+#' @param window One of `"source"` (for the source window), `"console"`
+#'   (for the console) or `"active"` (for the active document).
+#'   See [rstudio-editors].
 #' @export
-current_selection <- function(target = c("default", "lines", "script"), window = c("source", "console", "active")) {
+current_selection <- function(
+    target = c("default", "lines", "script"),
+    window = c("source", "console", "active")) {
   target <- match.arg(target)
   window <- match.arg(window)
   if(target == "lines") return(paste(current_lines(), collapse="\n"))
