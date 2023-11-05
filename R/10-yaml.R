@@ -98,7 +98,7 @@ load_yaml_tricks <- function(file = NULL, labels = NULL, reset = FALSE) {
 #' Sets up YAML tricks for user or project
 #'
 #' * Edits user level or project level ".RProfile" to add a call to `load_yaml_tricks()`
-#' * Optionally runs installation of tricks from {tricks} package (default for user level YAML)
+#' * Optionally runs installation of tricks from \pkg{tricks} package (default for user level YAML)
 #' * Adds the project level `.r-tricks.yaml` file to `.Rbuildignore`
 #'
 #' @param project_level Whether to setup tricks at the project level
@@ -158,7 +158,7 @@ use_yaml_tricks <- function(project_level = FALSE) {
 #' Install tricks from a package or path
 #'
 #' @param source The name of a package containing tricks., or a path to a YAML
-#' file defining tricks, By default proposes tricks from the {tricks} package
+#' file defining tricks, By default proposes tricks from the \pkg{tricks} package
 #' @param project_level whether to install tricks at the project level (in "./.r-tricks.yaml"),
 #'   by default they're installed at the user level (in "~/.r-tricks.yaml")
 #' @param all whether to install all tricks without prompting

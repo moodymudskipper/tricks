@@ -18,7 +18,7 @@ Sets up YAML tricks for user or project
 \details{
 \itemize{
 \item Edits user level or project level ".RProfile" to add a call to \code{load_yaml_tricks()}
-\item Optionally runs installation of tricks from {tricks} package (default for user level YAML)
+\item Optionally runs installation of tricks from \pkg{tricks} package (default for user level YAML)
 \item Adds the project level \code{.r-tricks.yaml} file to \code{.Rbuildignore}
 }
 }

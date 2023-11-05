@@ -8,7 +8,7 @@ install_tricks(source = "tricks", project_level = FALSE, all = FALSE)
 }
 \arguments{
 \item{source}{The name of a package containing tricks., or a path to a YAML
-file defining tricks, By default proposes tricks from the {tricks} package}
+file defining tricks, By default proposes tricks from the \pkg{tricks} package}
 
 \item{project_level}{whether to install tricks at the project level (in "./.r-tricks.yaml"),
 by default they're installed at the user level (in "~/.r-tricks.yaml")}

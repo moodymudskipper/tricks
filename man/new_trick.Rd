@@ -10,10 +10,10 @@ new_trick(label, condition, action, description = label, ...)
 \item{label}{A string}
 
 \item{condition}{A call or a one sided formula, using condition helpers and context informers, whose
-right hand side expressions returns a boolean when evaluated by {tricks}}
+right hand side expressions returns a boolean when evaluated by \pkg{tricks}}
 
 \item{action}{A call or a one sided formula, using action helpers and context informers, whose
-right hand side triggers the desired actions when evaluated by {tricks}}
+right hand side triggers the desired actions when evaluated by \pkg{tricks}}
 
 \item{description}{The description of the trick, for documentation purposes}
 
