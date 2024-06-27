@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A Single Addin for Context Dependent Actions • tricks</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -19,7 +19,7 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -47,7 +47,7 @@
 <li>
   <a href="https://github.com/moodymudskipper/tricks/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -58,7 +58,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="contents col-md-9">
@@ -110,10 +110,10 @@
 </h3>
 <p>Do you know how to easily edit your user R Profile ? There’s a nice {usethis} function for this, but maybe you have problems remembering it, or you’d rather not have to type it.</p>
 <p>We propose a trick to do that. If you trigger {tricks} when not selecting anything in the editor it will propose you to open your user R profile.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Edit user <span class="st">'.Rprofile'</span><span class="sc">:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  description<span class="sc">:</span> Opens user <span class="st">'.Rprofile'</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  condition<span class="sc">:</span> <span class="fu">selection_is_empty</span>()</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  action<span class="sc">:</span> usethis<span class="sc">::</span><span class="fu">edit_r_profile</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>Edit user <span class="st">'.Rprofile'</span><span class="sc">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  description<span class="sc">:</span> Opens user <span class="st">'.Rprofile'</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  condition<span class="sc">:</span> <span class="fu">selection_is_empty</span>()</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  action<span class="sc">:</span> usethis<span class="sc">::</span><span class="fu">edit_r_profile</span>()</span></code></pre></div>
 <p>We see below that whenever the selection is not empty the labels are not shown, but they are shown if the selection is empty.</p>
 <p><em>INSERT GIF</em></p>
 <p>Setting up tricks when the selection is empty is a good way to keep a list of bookmarks for actions you don’t want to remember how to trigger, maybe some other {usethis} workflow actions.</p>
@@ -131,10 +131,10 @@
 </h3>
 <p>The {reprex} package comes with a handy addin to create a reprex from a hotkey. You’ll have to remember how to trigger the hotkey though.</p>
 <p>If you don’t want to we can set up a trick that will be proposed whenever we select parsable code that isn’t a symbol, when it is triggered it should call the relevant {reprex} addin.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Reprex selection<span class="sc">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  description<span class="sc">:</span> Create a Reprex fron selection</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  condition<span class="sc">:</span> <span class="fu">selection_is_parsable</span>(<span class="at">symbol_ok =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  action<span class="sc">:</span> <span class="fu">call_addin</span>(<span class="st">"reprex"</span>, <span class="st">"Reprex selection"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>Reprex selection<span class="sc">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  description<span class="sc">:</span> Create a Reprex fron selection</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  condition<span class="sc">:</span> <span class="fu">selection_is_parsable</span>(<span class="at">symbol_ok =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  action<span class="sc">:</span> <span class="fu">call_addin</span>(<span class="st">"reprex"</span>, <span class="st">"Reprex selection"</span>)</span></code></pre></div>
 <p>We see below that whenever the selected code is parsable and is more than just a symbol, the action will be proposed.</p>
 <p><em>INSERT GIF</em></p>
 <p><code><a href="reference/selection-condition-helpers.html">selection_is_parsable()</a></code> is another <strong>condition helper</strong>. <code><a href="reference/action-helpers.html">call_addin()</a></code> is an <strong>action helper</strong>, there are more of them documented in `?``action-helpers```.</p>
@@ -146,18 +146,18 @@
 </h3>
 <p>You might not like to type the name of a function when you want to debug, we might could define an addin to call <code><a href="https://rdrr.io/r/base/debug.html" class="external-link">debugonce()</a></code> on your selection but then you have to find an unused hotkey and remember it.</p>
 <p>We can set a trick to <code><a href="https://rdrr.io/r/base/debug.html" class="external-link">debugonce()</a></code> a function, it should be proposed only if the selection is a symbol bound to a function.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">debugonce</span>({<span class="fu">current_selection</span>()})<span class="sc">:</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  description<span class="sc">:</span> Call <span class="fu">debugonce</span>() on selected <span class="cf">function</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  condition<span class="sc">:</span> <span class="fu">selection_is_function</span>()</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  action<span class="sc">:</span> <span class="fu">debugonce</span>(.(<span class="fu">current_call</span>()))</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">debugonce</span>({<span class="fu">current_selection</span>()})<span class="sc">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  description<span class="sc">:</span> Call <span class="fu">debugonce</span>() on selected <span class="cf">function</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  condition<span class="sc">:</span> <span class="fu">selection_is_function</span>()</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  action<span class="sc">:</span> <span class="fu">debugonce</span>(.(<span class="fu">current_call</span>()))</span></code></pre></div>
 <p>We see below that the action is proposed only if a symbol is selected and evaluates to a function.</p>
 <p><em>INSERT GIF</em></p>
 <p><code><a href="reference/selection-condition-helpers.html">selection_is_function()</a></code> is another <strong>condition helper</strong>. <code><a href="reference/current_selection.html">current_selection()</a></code> and <code><a href="reference/current_selection.html">current_call()</a></code> are <strong>context informers</strong>, they are documented in <code><a href="reference/current_selection.html">?current_selection</a></code>.</p>
 <p>We note a couple new things here : * We used {glue} notation in the label, this is handy to provide custom labels * We used <code>.()</code> inside <code><a href="https://rdrr.io/r/base/debug.html" class="external-link">debugonce()</a></code>, this is the same <code>.()</code> that we find in <code><a href="https://rdrr.io/r/base/bquote.html" class="external-link">bquote()</a></code>, <code><a href="https://rdrr.io/r/base/debug.html" class="external-link">debugonce()</a></code> uses NSE and supporting <code>.()</code> in actions and conditions permit us to program with such functions conveniently.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load_tricks</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&lt;label1&gt;"</span> <span class="ot">=</span> <span class="er">&lt;</span>condition1<span class="sc">&gt;</span> <span class="er">~</span> <span class="er">&lt;</span>action1<span class="sc">&gt;</span>, </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&lt;label2&gt;"</span> <span class="ot">=</span> <span class="er">&lt;</span>condition2<span class="sc">&gt;</span> <span class="er">~</span> <span class="er">&lt;</span>action2<span class="sc">&gt;</span>, </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  ...)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">load_tricks</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="st">"&lt;label1&gt;"</span> <span class="ot">=</span> <span class="er">&lt;</span>condition1<span class="sc">&gt;</span> <span class="er">~</span> <span class="er">&lt;</span>action1<span class="sc">&gt;</span>, </span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="st">"&lt;label2&gt;"</span> <span class="ot">=</span> <span class="er">&lt;</span>condition2<span class="sc">&gt;</span> <span class="er">~</span> <span class="er">&lt;</span>action2<span class="sc">&gt;</span>, </span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  ...)</span></code></pre></div>
 <p>The package contains a set of functions to help you define actions and conditions conveniently.</p>
 <p>Let’s go through a few examples.</p>
 </div>
@@ -167,10 +167,10 @@
 <a class="anchor" aria-label="anchor" href="#define-tricks-with-load_tricks"></a>
 </h2>
 <p>While we recommend using YAML files to store tricks, it might be useful to define tricks directly in R code for easier trial. This can be achieved using <code><a href="reference/load_tricks.html">load_tricks()</a></code>, its syntax is :</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tricks<span class="sc">::</span><span class="fu">load_tricks</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&lt;label1&gt;"</span> <span class="ot">=</span> <span class="er">&lt;</span>condition1<span class="sc">&gt;</span> <span class="er">~</span> <span class="er">&lt;</span>action1<span class="sc">&gt;</span>, </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&lt;label2&gt;"</span> <span class="ot">=</span> <span class="er">&lt;</span>condition2<span class="sc">&gt;</span> <span class="er">~</span> <span class="er">&lt;</span>action2<span class="sc">&gt;</span>, </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  ...)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>tricks<span class="sc">::</span><span class="fu">load_tricks</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="st">"&lt;label1&gt;"</span> <span class="ot">=</span> <span class="er">&lt;</span>condition1<span class="sc">&gt;</span> <span class="er">~</span> <span class="er">&lt;</span>action1<span class="sc">&gt;</span>, </span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="st">"&lt;label2&gt;"</span> <span class="ot">=</span> <span class="er">&lt;</span>condition2<span class="sc">&gt;</span> <span class="er">~</span> <span class="er">&lt;</span>action2<span class="sc">&gt;</span>, </span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  ...)</span></code></pre></div>
 <p>It also accepts trick objects defined with <code><a href="reference/new_trick.html">new_trick()</a></code></p>
 <p>To reproduce the tricks showcased above we would run :</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -267,16 +267,16 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

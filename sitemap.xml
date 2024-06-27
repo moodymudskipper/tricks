@@ -1,66 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/action-helpers.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addin.html</loc>
-  </url>
-  <url>
-    <loc>/reference/clipboard-condition-helpers.html</loc>
-  </url>
-  <url>
-    <loc>/reference/current_selection.html</loc>
-  </url>
-  <url>
-    <loc>/reference/edit_yaml_tricks.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fails.html</loc>
-  </url>
-  <url>
-    <loc>/reference/file-condition-helpers.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/install_tricks.html</loc>
-  </url>
-  <url>
-    <loc>/reference/load_tricks.html</loc>
-  </url>
-  <url>
-    <loc>/reference/load_yaml_tricks.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mock_context.html</loc>
-  </url>
-  <url>
-    <loc>/reference/new_trick.html</loc>
-  </url>
-  <url>
-    <loc>/reference/project-condition-helpers.html</loc>
-  </url>
-  <url>
-    <loc>/reference/selection-condition-helpers.html</loc>
-  </url>
-  <url>
-    <loc>/reference/system_has_internet.html</loc>
-  </url>
-  <url>
-    <loc>/reference/use_yaml_tricks.html</loc>
-  </url>
-  <url>
-    <loc>/reference/yaml_to_trick_list.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/action-helpers.html</loc></url>
+<url><loc>/reference/addin.html</loc></url>
+<url><loc>/reference/clipboard-condition-helpers.html</loc></url>
+<url><loc>/reference/current_selection.html</loc></url>
+<url><loc>/reference/edit_yaml_tricks.html</loc></url>
+<url><loc>/reference/fails.html</loc></url>
+<url><loc>/reference/file-condition-helpers.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/install_tricks.html</loc></url>
+<url><loc>/reference/load_tricks.html</loc></url>
+<url><loc>/reference/load_yaml_tricks.html</loc></url>
+<url><loc>/reference/mock_context.html</loc></url>
+<url><loc>/reference/new_trick.html</loc></url>
+<url><loc>/reference/project-condition-helpers.html</loc></url>
+<url><loc>/reference/selection-condition-helpers.html</loc></url>
+<url><loc>/reference/system_has_internet.html</loc></url>
+<url><loc>/reference/use_yaml_tricks.html</loc></url>
+<url><loc>/reference/yaml_to_trick_list.html</loc></url>
 </urlset>
+
