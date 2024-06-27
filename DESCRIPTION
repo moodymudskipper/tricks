@@ -26,3 +26,4 @@ Imports:
     clipr,
     yaml,
     rlang
+Config/gha/filter: os != "windows-latest" | r != "devel"
