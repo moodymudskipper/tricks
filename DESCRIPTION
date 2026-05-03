@@ -12,7 +12,6 @@ Encoding: UTF-8
 Language: en
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3.9000
 URL: https://github.com/moodymudskipper/tricks
 BugReports: https://github.com/moodymudskipper/tricks/issues
 Imports: 
@@ -27,3 +26,4 @@ Imports:
     yaml,
     rlang
 Config/gha/filter: os != "windows-latest" | r != "devel"
+Config/roxygen2/version: 8.0.0.9000
