@@ -62,9 +62,11 @@ export(unload_tricks)
 export(use_yaml_tricks)
 export(yaml_to_trick_list)
 importFrom(methods,allNames)
-importFrom(utils,assignInNamespace)
-importFrom(utils,capture.output)
-importFrom(utils,file.edit)
-importFrom(utils,getFromNamespace)
-importFrom(utils,globalVariables)
-importFrom(utils,select.list)
+importFrom(utils,
+  assignInNamespace,
+  capture.output,
+  file.edit,
+  getFromNamespace,
+  globalVariables,
+  select.list
+)
