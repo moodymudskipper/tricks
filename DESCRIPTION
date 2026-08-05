@@ -26,4 +26,4 @@ Imports:
     yaml,
     rlang
 Config/gha/filter: os != "windows-latest" | r != "devel"
-Config/roxygen2/version: 8.0.0.9000
+Config/roxygen2/version: 8.1.0.9000
