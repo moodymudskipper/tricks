@@ -5,12 +5,12 @@
 
 RStudio addins are handy but have flaws :
 
--   They’re contained in packages, which are not straightforward to
-    write/iterate on
--   It’s hard to remember which addins you’ve installed, and harder to
-    remember the hotkeys you’ve set for them
--   The addin list soon becomes overwhelming since they’re all shown at
-    all times, even when they don’t apply
+- They’re contained in packages, which are not straightforward to
+  write/iterate on
+- It’s hard to remember which addins you’ve installed, and harder to
+  remember the hotkeys you’ve set for them
+- The addin list soon becomes overwhelming since they’re all shown at
+  all times, even when they don’t apply
 
 So in the end you might not write them much, and not use them much.
 
@@ -20,9 +20,9 @@ hotkey \* It proposes only relevant actions, by observing the context
 
 A trick is defined by a condition, a label and an action, then:
 
--   When the **hotkey** is triggered , all **conditions** are evaluated
--   For satisfied **conditions**, **labels** are proposed to the user
--   Once the **label** is selected, the **action** is triggered
+- When the **hotkey** is triggered , all **conditions** are evaluated
+- For satisfied **conditions**, **labels** are proposed to the user
+- Once the **label** is selected, the **action** is triggered
 
 ## Installation
 
@@ -39,13 +39,13 @@ you can define them at the project or at the user level.
 These can be installed from packages or other YAML files using
 `install_tricks()`.
 
--   `install_tricks()` without arguments installs tricks that come with
-    the {tricks} package.
--   `install_tricks("some_tricks.yaml")` installs tricks defined in a
-    specific file
--   `install_tricks("pkg")` proposes you to install tricks from a
-    package, the developer of such package should include a
-    `tricks.yaml` file in the `inst` subfolder of their package.
+- `install_tricks()` without arguments installs tricks that come with
+  the {tricks} package.
+- `install_tricks("some_tricks.yaml")` installs tricks defined in a
+  specific file
+- `install_tricks("pkg")` proposes you to install tricks from a package,
+  the developer of such package should include a `tricks.yaml` file in
+  the `inst` subfolder of their package.
 
 *Insert gif describing `install_tricks()`, install a couple and apply
 them to a situation where they are not triggered at the same time*
@@ -84,11 +84,11 @@ maybe some other {usethis} workflow actions.
 `selection_is_empty()` is called a **condition helper**, and we have
 many of them, documented in :
 
--   \`?\`\`selection-condition-helpers\`\`\`
--   \`?\`\`file-condition-helpers\`\`\`
--   \`?\`\`project-condition-helpers\`\`\`
--   \`?\`\`clipboard-condition-helpers\`\`\`
--   \`?\`\`system-condition-helpers\`\`\`
+- \`?\`\`selection-condition-helpers\`\`\`
+- \`?\`\`file-condition-helpers\`\`\`
+- \`?\`\`project-condition-helpers\`\`\`
+- \`?\`\`clipboard-condition-helpers\`\`\`
+- \`?\`\`system-condition-helpers\`\`\`
 
 ### Reprex your selection
 
@@ -199,14 +199,13 @@ tricks::load_tricks(
 
 ## Explore and edit tricks
 
--   `edit_tricks()` to open YAML file
--   `install_tricks()` to add new entries to YAML files
--   `uninstall_tricks()` to remove some
--   `loaded_tricks()` or `View(loaded_tricks())` to explore loaded
-    tricks
--   `load_tricks()` to load trick objects or load tricks built from
-    formulas
--   `unload_tricks()` to unload some
+- `edit_tricks()` to open YAML file
+- `install_tricks()` to add new entries to YAML files
+- `uninstall_tricks()` to remove some
+- `loaded_tricks()` or `View(loaded_tricks())` to explore loaded tricks
+- `load_tricks()` to load trick objects or load tricks built from
+  formulas
+- `unload_tricks()` to unload some
 
 ## Isn’t it slow to have a lot of tricks ? Is it safe ?
 
